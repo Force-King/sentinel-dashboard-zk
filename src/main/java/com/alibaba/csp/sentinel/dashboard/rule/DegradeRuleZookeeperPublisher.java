@@ -16,7 +16,6 @@
 package com.alibaba.csp.sentinel.dashboard.rule;
 
 import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.DegradeRuleEntity;
-import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.FlowRuleEntity;
 import com.alibaba.csp.sentinel.datasource.Converter;
 import com.alibaba.csp.sentinel.util.AssertUtil;
 import org.apache.curator.framework.CuratorFramework;
@@ -28,6 +27,14 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
+
+/**
+ * @author guifei.qin
+ * @Classname DegradeRuleZookeeperPublisher
+ * @Description 降级规则push
+ * @Date 2019-07-08
+ * @Version V1.0
+ */
 @Component("degradeRuleZookeeperPublisher")
 public class DegradeRuleZookeeperPublisher implements DynamicRulePublisher<List<DegradeRuleEntity>> {
     @Autowired

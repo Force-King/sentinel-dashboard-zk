@@ -24,6 +24,13 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author guifei.qin
+ * @Classname FlowRuleZookeeperProvider
+ * @Description 从配置中心zk获取流控规则
+ * @Date 2019-07-08
+ * @Version V1.0
+ */
 @Component("flowRuleZookeeperProvider")
 public class FlowRuleZookeeperProvider implements DynamicRuleProvider<List<FlowRuleEntity>> {
 

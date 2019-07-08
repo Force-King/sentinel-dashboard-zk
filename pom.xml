@@ -2,20 +2,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.alibaba.csp</groupId>
+    <groupId>com.br.framework</groupId>
     <version>1.6.2</version>
     <artifactId>sentinel-dashboard-zk</artifactId>
     <packaging>jar</packaging>
 
     <properties>
-        <!-- Compile libs -->
         <fastjson.version>1.2.56</fastjson.version>
-
-        <!-- Test libs -->
         <junit.version>4.12</junit.version>
         <mockito.version>2.21.0</mockito.version>
         <assertj.version>3.12.1</assertj.version>
-
         <maven.deploy.version>2.8.2</maven.deploy.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>

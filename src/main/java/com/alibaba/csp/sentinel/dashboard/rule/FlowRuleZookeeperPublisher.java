@@ -27,6 +27,13 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
+/**
+ * @author guifei.qin
+ * @Classname FlowRuleZookeeperProvider
+ * @Description 流控规则push到配置中心zk
+ * @Date 2019-07-08
+ * @Version V1.0
+ */
 @Component("flowRuleZookeeperPublisher")
 public class FlowRuleZookeeperPublisher implements DynamicRulePublisher<List<FlowRuleEntity>> {
     @Autowired
