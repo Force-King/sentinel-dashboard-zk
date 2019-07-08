@@ -1,7 +1,0 @@
-my:
-  name: sentinel
-
-spring:
-  profiles:
-    active: dev
- 
