@@ -38,10 +38,18 @@ public class ZookeeperSentinelConfig {
 
     @PostConstruct
     public void loadRules() {
+        //限流Flow
         ReadableDataSource<String, List<FlowRule>> flowRuleDataSource = new ZookeeperDataSource<>(zkAddress, zkPath + appName,
                 source -> JSON.parseObject(source, new TypeReference<List<FlowRule>>() {
                 }));
         FlowRuleManager.register2Property(flowRuleDataSource.getProperty());
+        
+        //降级Degrade
+        String degradePath = zkPath + appName + DEGRADE_PATH;
+        Converter<String, List<DegradeRule>> degradeRules = source -> JSON.parseObject(source, new TypeReference<List<DegradeRule>>() {
+        });
+        ReadableDataSource<String, List<DegradeRule>> zkDataSourceDegrade = new ZookeeperDataSource<>(zkAddress, degradePath, degradeRules);
+        DegradeRuleManager.register2Property(zkDataSourceDegrade.getProperty());
         logger.info("----------------- Sentinel DataSource Zookeeper Init Success -------------------");
     }
 
