@@ -1,7 +1,10 @@
 package com.alibaba.csp.sentinel.dashboard.rule;
 
+import com.alibaba.csp.sentinel.datasource.Converter;
 import com.alibaba.csp.sentinel.datasource.ReadableDataSource;
 import com.alibaba.csp.sentinel.datasource.zookeeper.ZookeeperDataSource;
+import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRule;
+import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRuleManager;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;
 import com.alibaba.fastjson.JSON;
@@ -38,10 +41,18 @@ public class ZookeeperSentinelConfig {
 
     @PostConstruct
     public void loadRules() {
+        //限流Flow
         ReadableDataSource<String, List<FlowRule>> flowRuleDataSource = new ZookeeperDataSource<>(zkAddress, zkPath + appName,
                 source -> JSON.parseObject(source, new TypeReference<List<FlowRule>>() {
                 }));
         FlowRuleManager.register2Property(flowRuleDataSource.getProperty());
+
+        //降级Degrade
+        String degradePath = zkPath + appName + DEGRADE_PATH;
+        Converter<String, List<DegradeRule>> degradeRules = source -> JSON.parseObject(source, new TypeReference<List<DegradeRule>>() {
+        });
+        ReadableDataSource<String, List<DegradeRule>> zkDataSourceDegrade = new ZookeeperDataSource<>(zkAddress, degradePath, degradeRules);
+        DegradeRuleManager.register2Property(zkDataSourceDegrade.getProperty());
         logger.info("----------------- Sentinel DataSource Zookeeper Init Success -------------------");
     }
 
