@@ -3,7 +3,7 @@ package com.alibaba.csp.sentinel.dashboard.rule;
 import org.apache.commons.lang.StringUtils;
 
 /**
- * @Author guifei.qin
+ * @Author CleverApe
  * @Date 2019-07-08
  */
 public class ZookeeperConfigUtil {

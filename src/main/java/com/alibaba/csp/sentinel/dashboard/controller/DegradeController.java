@@ -44,7 +44,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Degrade rule controller
- * @author guifei.qin
+ * @author CleverApe
  */
 @Controller
 @RequestMapping(value = "/degrade", produces = MediaType.APPLICATION_JSON_VALUE)

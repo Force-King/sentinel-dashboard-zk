@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author guifei.qin
+ * @author CleverApe
  * @Classname FlowRuleZookeeperProvider
  * @Description 从配置中心zk获取流控规则
  * @Date 2019-07-08

@@ -29,7 +29,7 @@ import java.util.List;
 
 
 /**
- * @author guifei.qin
+ * @author CleverApe
  * @Classname DegradeRuleZookeeperPublisher
  * @Description 降级规则push
  * @Date 2019-07-08

@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
- * @author guifei.qin
+ * @author CleverApe
  * @Classname ZookeeperSentinelConfig
  * @Description Sentinel 注册zk配置中心
  * @Date 2019-07-06 11:19

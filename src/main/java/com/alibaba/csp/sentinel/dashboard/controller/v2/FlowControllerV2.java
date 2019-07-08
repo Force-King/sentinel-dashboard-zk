@@ -48,7 +48,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Flow rule controller (v2).
  *
- * @author guifei.qin
+ * @author CleverApe
  * @Date 2019-07-08
  */
 @RestController

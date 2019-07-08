@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author guifei.qin
+ * @author CleverApe
  * @Classname DegradeZookeeperProvider
  * @Description 从配置中心zk获取降级规则
  * @Date 2019-07-08
