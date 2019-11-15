@@ -3,12 +3,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.br.framework</groupId>
-    <version>1.6.2</version>
+    <version>1.6.3</version>
     <artifactId>sentinel-dashboard-zk</artifactId>
     <packaging>jar</packaging>
 
     <properties>
-        <fastjson.version>1.2.56</fastjson.version>
+        <fastjson.version>1.2.62</fastjson.version>
         <junit.version>4.12</junit.version>
         <mockito.version>2.21.0</mockito.version>
         <assertj.version>3.12.1</assertj.version>

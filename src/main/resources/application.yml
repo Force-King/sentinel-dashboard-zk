@@ -3,5 +3,5 @@ my:
 
 spring:
   profiles:
-    active: dev
+    active: test
  
