@@ -29,17 +29,21 @@ import javax.servlet.http.HttpSession;
 @Component
 public class SimpleWebAuthServiceImpl implements AuthService<HttpServletRequest> {
 
-    public static final String WEB_SESSION_KEY = "session_sentinel_admin";
-    public static final String WEB_SESSION_KEY = "session_sentinel_admin";
+    public static final String WEB_SESSION_KEY = "session_sentinel_user";
+    public static final String WEB_SESSION_KEY_ADMIN = "session_sentinel_admin";
 
     @Override
     public AuthUser getAuthUser(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        Object sentinelUserObj = session.getAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY);
+        Object sentinelUserObj = session.getAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY_ADMIN);
+
         if (sentinelUserObj != null && sentinelUserObj instanceof AuthUser) {
             return (AuthUser) sentinelUserObj;
         }
-
+        sentinelUserObj = session.getAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY);
+        if (sentinelUserObj != null && sentinelUserObj instanceof AuthUser) {
+            return (AuthUser) sentinelUserObj;
+        }
         return null;
     }
 

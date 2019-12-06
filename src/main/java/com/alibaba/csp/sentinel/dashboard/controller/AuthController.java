@@ -76,18 +76,23 @@ public class AuthController {
             return Result.ofFail(-1, "用户名不正确！");
         }
         if(adminUsername.equals(username)) {
-
+            if (StringUtils.isNotBlank(adminPassword) && !adminPassword.equals(password)) {
+                LOGGER.error("Login failed: 密码不正确, username=" + username);
+                return Result.ofFail(-1, "密码不正确");
+            }
+            AuthService.AuthUser authUser = new SimpleWebAuthServiceImpl.SimpleWebAuthUserImpl(username);
+            request.getSession().setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY_ADMIN, authUser);
+            return Result.ofSuccess(authUser);
         } else {
             if (StringUtils.isNotBlank(authPassword) && !authPassword.equals(password)) {
                 LOGGER.error("Login failed: Invalid username or password, username=" + username);
-                return Result.ofFail(-1, "Invalid username or password");
+                return Result.ofFail(-1, "密码不正确");
             }
+            AuthService.AuthUser authUser = new SimpleWebAuthServiceImpl.SimpleWebAuthUserImpl(username);
+            request.getSession().setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY, authUser);
+            return Result.ofSuccess(authUser);
         }
 
-
-        AuthService.AuthUser authUser = new SimpleWebAuthServiceImpl.SimpleWebAuthUserImpl(username);
-        request.getSession().setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY, authUser);
-        return Result.ofSuccess(authUser);
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
