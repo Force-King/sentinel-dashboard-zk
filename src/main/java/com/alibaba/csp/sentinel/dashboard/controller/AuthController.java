@@ -46,6 +46,12 @@ public class AuthController {
     @Value("${auth.password:sentinel}")
     private String authPassword;
 
+    @Value("${auth.admin.username}")
+    private String adminUsername;
+
+    @Value("${auth.admin.password}")
+    private String adminPassword;
+
     @PostMapping("/login")
     public Result<AuthService.AuthUser> login(HttpServletRequest request, String username, String password) {
         if (StringUtils.isNotBlank(DashboardConfig.getAuthUsername())) {
@@ -61,11 +67,23 @@ public class AuthController {
          * auth will pass, as the front side validate the input which can't be blank,
          * so user can input any username or password(both are not blank) to login in that case.
          */
-        if (StringUtils.isNotBlank(authUsername) && !authUsername.equals(username)
-                || StringUtils.isNotBlank(authPassword) && !authPassword.equals(password)) {
-            LOGGER.error("Login failed: Invalid username or password, username=" + username);
-            return Result.ofFail(-1, "Invalid username or password");
+        if(StringUtils.isBlank(username)) {
+            LOGGER.error("Login failed: Invalid username is null");
+            return Result.ofFail(-1, "用户名不能为空！");
         }
+        if(!authUsername.equals(username) || !adminUsername.equals(username)) {
+            LOGGER.error("Login failed: 用户名不正确");
+            return Result.ofFail(-1, "用户名不正确！");
+        }
+        if(adminUsername.equals(username)) {
+
+        } else {
+            if (StringUtils.isNotBlank(authPassword) && !authPassword.equals(password)) {
+                LOGGER.error("Login failed: Invalid username or password, username=" + username);
+                return Result.ofFail(-1, "Invalid username or password");
+            }
+        }
+
 
         AuthService.AuthUser authUser = new SimpleWebAuthServiceImpl.SimpleWebAuthUserImpl(username);
         request.getSession().setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY, authUser);

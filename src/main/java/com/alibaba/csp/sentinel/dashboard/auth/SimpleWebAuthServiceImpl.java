@@ -30,6 +30,7 @@ import javax.servlet.http.HttpSession;
 public class SimpleWebAuthServiceImpl implements AuthService<HttpServletRequest> {
 
     public static final String WEB_SESSION_KEY = "session_sentinel_admin";
+    public static final String WEB_SESSION_KEY = "session_sentinel_admin";
 
     @Override
     public AuthUser getAuthUser(HttpServletRequest request) {

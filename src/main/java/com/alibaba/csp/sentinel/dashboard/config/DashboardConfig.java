@@ -47,6 +47,10 @@ public class DashboardConfig {
      */
     public static final String CONFIG_AUTH_PASSWORD = "sentinel.dashboard.auth.password";
 
+    public static final String ADMIN_USERNAME = "sentinel.dashboard.auth.admin.username";
+
+    public static final String ADMIN_PASSWORD = "sentinel.dashboard.auth.admin.password";
+
     /**
      * Hide application name in sidebar when it has no healthy machines after specific period in millisecond.
      */
