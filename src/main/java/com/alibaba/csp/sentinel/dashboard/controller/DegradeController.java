@@ -37,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,6 +67,9 @@ public class DegradeController {
     @Autowired
     @Qualifier("degradeRuleZookeeperPublisher")
     private DynamicRulePublisher<List<DegradeRuleEntity>> rulePublisher;
+
+    @Value("${auth.admin.username}")
+    private String adminUsername;
 
     @ResponseBody
     @RequestMapping("/rules.json")
@@ -105,6 +109,9 @@ public class DegradeController {
                                          String app, String ip, Integer port, String limitApp, String resource,
                                          Double count, Integer timeWindow, Integer grade) {
         AuthUser authUser = authService.getAuthUser(request);
+        if(!adminUsername.equals(authUser.getLoginName())) {
+            return Result.ofFail(-2, "您不是管理员，没有该权限！");
+        }
         authUser.authTarget(app, PrivilegeType.WRITE_RULE);
 
         if (StringUtil.isBlank(app)) {
@@ -163,6 +170,9 @@ public class DegradeController {
                                                      Long id, String app, String limitApp, String resource,
                                                      Double count, Integer timeWindow, Integer grade) {
         AuthUser authUser = authService.getAuthUser(request);
+        if(!adminUsername.equals(authUser.getLoginName())) {
+            return Result.ofFail(-2, "您不是管理员，没有该权限！");
+        }
         if (id == null) {
             return Result.ofFail(-1, "id can't be null");
         }
@@ -214,6 +224,9 @@ public class DegradeController {
     @RequestMapping("/delete.json")
     public Result<Long> delete(HttpServletRequest request, Long id) {
         AuthUser authUser = authService.getAuthUser(request);
+        if(!adminUsername.equals(authUser.getLoginName())) {
+            return Result.ofFail(-2, "您不是管理员，没有该权限！");
+        }
         if (id == null) {
             return Result.ofFail(-1, "id can't be null");
         }

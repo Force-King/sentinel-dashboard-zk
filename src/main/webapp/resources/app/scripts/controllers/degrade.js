@@ -137,7 +137,7 @@ app.controller('DegradeCtl', ['$scope', '$stateParams', 'DegradeService', 'ngDia
           getMachineRules();
           confirmDialog.close();
         } else {
-          alert('失败!');
+          alert(data.msg);
         }
       });
     };
@@ -148,7 +148,7 @@ app.controller('DegradeCtl', ['$scope', '$stateParams', 'DegradeService', 'ngDia
           getMachineRules();
           degradeRuleDialog.close();
         } else {
-          alert('失败!');
+          alert(data.msg);
         }
       });
     };
@@ -163,7 +163,7 @@ app.controller('DegradeCtl', ['$scope', '$stateParams', 'DegradeService', 'ngDia
             confirmDialog.close();
           }
         } else {
-          alert('失败!');
+          alert(data.msg);
         }
       });
     }

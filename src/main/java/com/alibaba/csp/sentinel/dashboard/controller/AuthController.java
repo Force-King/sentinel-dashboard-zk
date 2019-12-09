@@ -71,7 +71,7 @@ public class AuthController {
             LOGGER.error("Login failed: Invalid username is null");
             return Result.ofFail(-1, "用户名不能为空！");
         }
-        if(!authUsername.equals(username) || !adminUsername.equals(username)) {
+        if(!authUsername.equals(username) && !adminUsername.equals(username)) {
             LOGGER.error("Login failed: 用户名不正确");
             return Result.ofFail(-1, "用户名不正确！");
         }

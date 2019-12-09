@@ -171,7 +171,7 @@ app.controller('SystemCtl', ['$scope', '$stateParams', 'SystemService', 'ngDialo
           getMachineRules();
           systemRuleDialog.close();
         } else {
-          alert('失败!');
+          alert(data.msg);
         }
       });
     };
@@ -191,7 +191,7 @@ app.controller('SystemCtl', ['$scope', '$stateParams', 'SystemService', 'ngDialo
             confirmDialog.close();
           }
         } else {
-          alert('失败!');
+          alert(data.msg);
         }
       });
     }

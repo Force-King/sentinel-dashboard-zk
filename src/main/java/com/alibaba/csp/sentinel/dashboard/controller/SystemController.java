@@ -34,6 +34,7 @@ import com.alibaba.csp.sentinel.dashboard.repository.rule.InMemSystemRuleStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -53,6 +54,9 @@ public class SystemController {
     private SentinelApiClient sentinelApiClient;
     @Autowired
     private AuthService<HttpServletRequest> authService;
+
+    @Value("${auth.admin.username}")
+    private String adminUsername;
 
     @ResponseBody
     @RequestMapping("/rules.json")
@@ -93,6 +97,9 @@ public class SystemController {
     Result<?> add(HttpServletRequest request,
                   String app, String ip, Integer port, Double avgLoad, Long avgRt, Long maxThread, Double qps) {
         AuthUser authUser = authService.getAuthUser(request);
+        if(!adminUsername.equals(authUser.getLoginName())) {
+            return Result.ofFail(-2, "您不是管理员，没有该权限！");
+        }
         authUser.authTarget(app, PrivilegeType.WRITE_RULE);
         if (StringUtil.isBlank(app)) {
             return Result.ofFail(-1, "app can't be null or empty");
@@ -153,6 +160,9 @@ public class SystemController {
     Result<?> updateIfNotNull(HttpServletRequest request,
                               Long id, String app, Double avgLoad, Long avgRt, Long maxThread, Double qps) {
         AuthUser authUser = authService.getAuthUser(request);
+        if(!adminUsername.equals(authUser.getLoginName())) {
+            return Result.ofFail(-2, "您不是管理员，没有该权限！");
+        }
         if (id == null) {
             return Result.ofFail(-1, "id can't be null");
         }
@@ -206,6 +216,9 @@ public class SystemController {
     @RequestMapping("/delete.json")
     Result<?> delete(HttpServletRequest request, Long id) {
         AuthUser authUser = authService.getAuthUser(request);
+        if(!adminUsername.equals(authUser.getLoginName())) {
+            return Result.ofFail(-2, "您不是管理员，没有该权限！");
+        }
         if (id == null) {
             return Result.ofFail(-1, "id can't be null");
         }

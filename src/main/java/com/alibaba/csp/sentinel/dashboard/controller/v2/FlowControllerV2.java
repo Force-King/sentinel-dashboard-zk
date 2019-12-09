@@ -35,6 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,6 +70,9 @@ public class FlowControllerV2 {
 
     @Autowired
     private AuthService<HttpServletRequest> authService;
+
+    @Value("${auth.admin.username}")
+    private String adminUsername;
 
     @GetMapping("/rules")
     public Result<List<FlowRuleEntity>> apiQueryMachineRules(HttpServletRequest request, @RequestParam String app) {
@@ -156,6 +160,9 @@ public class FlowControllerV2 {
         entity.setLimitApp(entity.getLimitApp().trim());
         entity.setResource(entity.getResource().trim());
         try {
+            if(!adminUsername.equals(authUser.getLoginName())) {
+                return Result.ofFail(-2, "您不是管理员，没有该权限！");
+            }
             entity = repository.save(entity);
             publishRules(entity.getApp());
         } catch (Throwable throwable) {
@@ -195,6 +202,9 @@ public class FlowControllerV2 {
         entity.setGmtCreate(oldEntity.getGmtCreate());
         entity.setGmtModified(date);
         try {
+            if(!adminUsername.equals(authUser.getLoginName())) {
+                return Result.ofFail(-2, "您不是管理员，没有该权限！");
+            }
             entity = repository.save(entity);
             if (entity == null) {
                 return Result.ofFail(-1, "save entity fail");
@@ -210,6 +220,9 @@ public class FlowControllerV2 {
     @DeleteMapping("/rule/{id}")
     public Result<Long> apiDeleteRule(HttpServletRequest request, @PathVariable("id") Long id) {
         AuthUser authUser = authService.getAuthUser(request);
+        if(!adminUsername.equals(authUser.getLoginName())) {
+            return Result.ofFail(-2, "您不是管理员，没有该权限！");
+        }
         if (id == null || id <= 0) {
             return Result.ofFail(-1, "Invalid id");
         }
