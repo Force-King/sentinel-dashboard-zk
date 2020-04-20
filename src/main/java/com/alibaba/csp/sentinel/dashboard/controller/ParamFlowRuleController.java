@@ -15,30 +15,26 @@
  */
 package com.alibaba.csp.sentinel.dashboard.controller;
 
+import com.alibaba.csp.sentinel.dashboard.auth.AuthService;
+import com.alibaba.csp.sentinel.dashboard.auth.AuthService.AuthUser;
+import com.alibaba.csp.sentinel.dashboard.auth.AuthService.PrivilegeType;
+import com.alibaba.csp.sentinel.dashboard.client.CommandNotFoundException;
+import com.alibaba.csp.sentinel.dashboard.client.SentinelApiClient;
+import com.alibaba.csp.sentinel.dashboard.datasource.entity.SentinelVersion;
+import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.ParamFlowRuleEntity;
+import com.alibaba.csp.sentinel.dashboard.discovery.AppManagement;
+import com.alibaba.csp.sentinel.dashboard.discovery.MachineInfo;
+import com.alibaba.csp.sentinel.dashboard.domain.Result;
+import com.alibaba.csp.sentinel.dashboard.repository.rule.RuleRepository;
+import com.alibaba.csp.sentinel.dashboard.util.VersionUtils;
+import com.alibaba.csp.sentinel.slots.block.RuleConstant;
+import com.alibaba.csp.sentinel.util.StringUtil;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-
 import javax.servlet.http.HttpServletRequest;
-
-import com.alibaba.csp.sentinel.dashboard.client.CommandNotFoundException;
-import com.alibaba.csp.sentinel.dashboard.client.SentinelApiClient;
-import com.alibaba.csp.sentinel.dashboard.discovery.AppManagement;
-import com.alibaba.csp.sentinel.dashboard.discovery.MachineInfo;
-import com.alibaba.csp.sentinel.dashboard.auth.AuthService;
-import com.alibaba.csp.sentinel.dashboard.auth.AuthService.AuthUser;
-import com.alibaba.csp.sentinel.dashboard.auth.AuthService.PrivilegeType;
-import com.alibaba.csp.sentinel.slots.block.RuleConstant;
-import com.alibaba.csp.sentinel.util.StringUtil;
-
-import com.alibaba.csp.sentinel.dashboard.datasource.entity.SentinelVersion;
-import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.ParamFlowRuleEntity;
-import com.alibaba.csp.sentinel.dashboard.domain.Result;
-import com.alibaba.csp.sentinel.dashboard.repository.rule.RuleRepository;
-import com.alibaba.csp.sentinel.dashboard.util.VersionUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,27 +58,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class ParamFlowRuleController {
 
     private final Logger logger = LoggerFactory.getLogger(ParamFlowRuleController.class);
-
+    private final SentinelVersion version020 = new SentinelVersion().setMinorVersion(2);
     @Autowired
     private SentinelApiClient sentinelApiClient;
     @Autowired
     private AppManagement appManagement;
     @Autowired
     private RuleRepository<ParamFlowRuleEntity, Long> repository;
-
     @Autowired
     private AuthService<HttpServletRequest> authService;
-
     @Value("${auth.admin.username}")
     private String adminUsername;
 
     private boolean checkIfSupported(String app, String ip, int port) {
         try {
             return Optional.ofNullable(appManagement.getDetailApp(app))
-                .flatMap(e -> e.getMachine(ip, port))
-                .flatMap(m -> VersionUtils.parseVersion(m.getVersion())
-                    .map(v -> v.greaterOrEqual(version020)))
-                .orElse(true);
+                    .flatMap(e -> e.getMachine(ip, port))
+                    .flatMap(m -> VersionUtils.parseVersion(m.getVersion())
+                            .map(v -> v.greaterOrEqual(version020)))
+                    .orElse(true);
             // If error occurred or cannot retrieve machine info, return true.
         } catch (Exception ex) {
             return true;
@@ -91,9 +85,7 @@ public class ParamFlowRuleController {
 
     @GetMapping("/rules")
     public Result<List<ParamFlowRuleEntity>> apiQueryAllRulesForMachine(HttpServletRequest request,
-                                                                        @RequestParam String app,
-                                                                        @RequestParam String ip,
-                                                                        @RequestParam Integer port) {
+            @RequestParam String app, @RequestParam String ip, @RequestParam Integer port) {
         AuthUser authUser = authService.getAuthUser(request);
         authUser.authTarget(app, PrivilegeType.READ_RULE);
         if (StringUtil.isEmpty(app)) {
@@ -110,9 +102,9 @@ public class ParamFlowRuleController {
         }
         try {
             return sentinelApiClient.fetchParamFlowRulesOfMachine(app, ip, port)
-                .thenApply(repository::saveAll)
-                .thenApply(Result::ofSuccess)
-                .get();
+                    .thenApply(repository::saveAll)
+                    .thenApply(Result::ofSuccess)
+                    .get();
         } catch (ExecutionException ex) {
             logger.error("Error when querying parameter flow rules", ex.getCause());
             if (isNotSupported(ex.getCause())) {
@@ -132,9 +124,9 @@ public class ParamFlowRuleController {
 
     @PostMapping("/rule")
     public Result<ParamFlowRuleEntity> apiAddParamFlowRule(HttpServletRequest request,
-                                                           @RequestBody ParamFlowRuleEntity entity) {
+            @RequestBody ParamFlowRuleEntity entity) {
         AuthUser authUser = authService.getAuthUser(request);
-        if(!adminUsername.equals(authUser.getLoginName())) {
+        if (!adminUsername.equals(authUser.getLoginName())) {
             return Result.ofFail(-2, "您不是管理员，没有该权限！");
         }
         authUser.authTarget(entity.getApp(), PrivilegeType.WRITE_RULE);
@@ -146,7 +138,9 @@ public class ParamFlowRuleController {
             return unsupportedVersion();
         }
         entity.setId(null);
-        entity.getRule().setResource(entity.getResource().trim());
+        entity.getRule()
+                .setResource(entity.getResource()
+                        .trim());
         Date date = new Date();
         entity.setGmtCreate(date);
         entity.setGmtModified(date);
@@ -205,11 +199,10 @@ public class ParamFlowRuleController {
     }
 
     @PutMapping("/rule/{id}")
-    public Result<ParamFlowRuleEntity> apiUpdateParamFlowRule(HttpServletRequest request,
-                                                              @PathVariable("id") Long id,
-                                                              @RequestBody ParamFlowRuleEntity entity) {
+    public Result<ParamFlowRuleEntity> apiUpdateParamFlowRule(HttpServletRequest request, @PathVariable("id") Long id,
+            @RequestBody ParamFlowRuleEntity entity) {
         AuthUser authUser = authService.getAuthUser(request);
-        if(!adminUsername.equals(authUser.getLoginName())) {
+        if (!adminUsername.equals(authUser.getLoginName())) {
             return Result.ofFail(-2, "您不是管理员，没有该权限！");
         }
         if (id == null || id <= 0) {
@@ -251,7 +244,7 @@ public class ParamFlowRuleController {
     @DeleteMapping("/rule/{id}")
     public Result<Long> apiDeleteRule(HttpServletRequest request, @PathVariable("id") Long id) {
         AuthUser authUser = authService.getAuthUser(request);
-        if(!adminUsername.equals(authUser.getLoginName())) {
+        if (!adminUsername.equals(authUser.getLoginName())) {
             return Result.ofFail(-2, "您不是管理员，没有该权限！");
         }
         if (id == null) {
@@ -286,8 +279,6 @@ public class ParamFlowRuleController {
 
     private <R> Result<R> unsupportedVersion() {
         return Result.ofFail(4041,
-            "Sentinel client not supported for parameter flow control (unsupported version or dependency absent)");
+                "Sentinel client not supported for parameter flow control (unsupported version or dependency absent)");
     }
-
-    private final SentinelVersion version020 = new SentinelVersion().setMinorVersion(2);
 }

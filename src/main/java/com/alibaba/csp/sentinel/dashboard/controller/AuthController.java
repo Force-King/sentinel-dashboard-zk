@@ -19,6 +19,7 @@ import com.alibaba.csp.sentinel.dashboard.auth.AuthService;
 import com.alibaba.csp.sentinel.dashboard.auth.SimpleWebAuthServiceImpl;
 import com.alibaba.csp.sentinel.dashboard.config.DashboardConfig;
 import com.alibaba.csp.sentinel.dashboard.domain.Result;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +28,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author cdfive
@@ -67,21 +66,22 @@ public class AuthController {
          * auth will pass, as the front side validate the input which can't be blank,
          * so user can input any username or password(both are not blank) to login in that case.
          */
-        if(StringUtils.isBlank(username)) {
+        if (StringUtils.isBlank(username)) {
             LOGGER.error("Login failed: Invalid username is null");
             return Result.ofFail(-1, "用户名不能为空！");
         }
-        if(!authUsername.equals(username) && !adminUsername.equals(username)) {
+        if (!authUsername.equals(username) && !adminUsername.equals(username)) {
             LOGGER.error("Login failed: 用户名不正确");
             return Result.ofFail(-1, "用户名不正确！");
         }
-        if(adminUsername.equals(username)) {
+        if (adminUsername.equals(username)) {
             if (StringUtils.isNotBlank(adminPassword) && !adminPassword.equals(password)) {
                 LOGGER.error("Login failed: 密码不正确, username=" + username);
                 return Result.ofFail(-1, "密码不正确");
             }
             AuthService.AuthUser authUser = new SimpleWebAuthServiceImpl.SimpleWebAuthUserImpl(username);
-            request.getSession().setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY_ADMIN, authUser);
+            request.getSession()
+                    .setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY_ADMIN, authUser);
             return Result.ofSuccess(authUser);
         } else {
             if (StringUtils.isNotBlank(authPassword) && !authPassword.equals(password)) {
@@ -89,7 +89,8 @@ public class AuthController {
                 return Result.ofFail(-1, "密码不正确");
             }
             AuthService.AuthUser authUser = new SimpleWebAuthServiceImpl.SimpleWebAuthUserImpl(username);
-            request.getSession().setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY, authUser);
+            request.getSession()
+                    .setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY, authUser);
             return Result.ofSuccess(authUser);
         }
 
@@ -97,7 +98,8 @@ public class AuthController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public Result<?> logout(HttpServletRequest request) {
-        request.getSession().invalidate();
+        request.getSession()
+                .invalidate();
         return Result.ofSuccess(null);
     }
 }

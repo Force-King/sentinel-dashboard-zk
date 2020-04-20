@@ -15,10 +15,9 @@
  */
 package com.alibaba.csp.sentinel.dashboard.domain.vo;
 
+import com.alibaba.csp.sentinel.dashboard.discovery.MachineInfo;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.alibaba.csp.sentinel.dashboard.discovery.MachineInfo;
 
 /**
  * @author leyou
@@ -91,17 +90,17 @@ public class MachineInfoVo {
     public long getLastHeartbeat() {
         return lastHeartbeat;
     }
-    
+
     public void setLastHeartbeat(long lastHeartbeat) {
         this.lastHeartbeat = lastHeartbeat;
     }
-    
-    public void setHeartbeatVersion(long heartbeatVersion) {
-        this.heartbeatVersion = heartbeatVersion;
-    }
-    
+
     public long getHeartbeatVersion() {
         return heartbeatVersion;
+    }
+
+    public void setHeartbeatVersion(long heartbeatVersion) {
+        this.heartbeatVersion = heartbeatVersion;
     }
 
     public String getVersion() {

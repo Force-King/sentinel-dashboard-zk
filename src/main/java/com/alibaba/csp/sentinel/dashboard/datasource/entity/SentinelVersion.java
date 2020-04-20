@@ -20,26 +20,27 @@ package com.alibaba.csp.sentinel.dashboard.datasource.entity;
  * @since 0.2.1
  */
 public class SentinelVersion {
+
     private int majorVersion;
     private int minorVersion;
     private int fixVersion;
     private String postfix;
-    
+
     public SentinelVersion() {
         this(0, 0, 0);
     }
-    
+
     public SentinelVersion(int major, int minor, int fix) {
         this(major, minor, fix, null);
     }
-    
+
     public SentinelVersion(int major, int minor, int fix, String postfix) {
         this.majorVersion = major;
         this.minorVersion = minor;
         this.fixVersion = fix;
         this.postfix = postfix;
     }
-    
+
     /**
      * 000, 000, 000
      */
@@ -99,12 +100,18 @@ public class SentinelVersion {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (o == null || getClass() != o.getClass()) { return false; }
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
-        SentinelVersion that = (SentinelVersion)o;
+        SentinelVersion that = (SentinelVersion) o;
 
-        if (getFullVersion() != that.getFullVersion()) { return false; }
+        if (getFullVersion() != that.getFullVersion()) {
+            return false;
+        }
         return postfix != null ? postfix.equals(that.postfix) : that.postfix == null;
     }
 
@@ -119,11 +126,7 @@ public class SentinelVersion {
 
     @Override
     public String toString() {
-        return "SentinelVersion{" +
-            "majorVersion=" + majorVersion +
-            ", minorVersion=" + minorVersion +
-            ", fixVersion=" + fixVersion +
-            ", postfix='" + postfix + '\'' +
-            '}';
+        return "SentinelVersion{" + "majorVersion=" + majorVersion + ", minorVersion=" + minorVersion + ", fixVersion="
+                + fixVersion + ", postfix='" + postfix + '\'' + '}';
     }
 }

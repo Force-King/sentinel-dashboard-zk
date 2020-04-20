@@ -15,20 +15,17 @@
  */
 package com.alibaba.csp.sentinel.dashboard.rule.apollo;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.FlowRuleEntity;
 import com.alibaba.csp.sentinel.dashboard.rule.DynamicRuleProvider;
 import com.alibaba.csp.sentinel.datasource.Converter;
 import com.alibaba.csp.sentinel.util.StringUtil;
-
 import com.ctrip.framework.apollo.openapi.client.ApolloOpenApiClient;
 import com.ctrip.framework.apollo.openapi.dto.OpenItemDTO;
 import com.ctrip.framework.apollo.openapi.dto.OpenNamespaceDTO;
+import java.util.ArrayList;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author hantianwei@gmail.com
@@ -47,13 +44,13 @@ public class FlowRuleApolloProvider implements DynamicRuleProvider<List<FlowRule
         String appId = "appId";
         String flowDataId = ApolloConfigUtil.getFlowDataId(appName);
         OpenNamespaceDTO openNamespaceDTO = apolloOpenApiClient.getNamespace(appId, "DEV", "default", "application");
-        String rules = openNamespaceDTO
-            .getItems()
-            .stream()
-            .filter(p -> p.getKey().equals(flowDataId))
-            .map(OpenItemDTO::getValue)
-            .findFirst()
-            .orElse("");
+        String rules = openNamespaceDTO.getItems()
+                .stream()
+                .filter(p -> p.getKey()
+                        .equals(flowDataId))
+                .map(OpenItemDTO::getValue)
+                .findFirst()
+                .orElse("");
 
         if (StringUtil.isEmpty(rules)) {
             return new ArrayList<>();

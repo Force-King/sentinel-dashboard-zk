@@ -21,6 +21,7 @@ import java.util.Date;
  * @author leyou
  */
 public class MetricPositionEntity {
+
     private long id;
     private Date gmtCreate;
     private Date gmtModified;
@@ -107,15 +108,8 @@ public class MetricPositionEntity {
 
     @Override
     public String toString() {
-        return "MetricPositionEntity{" +
-            "id=" + id +
-            ", gmtCreate=" + gmtCreate +
-            ", gmtModified=" + gmtModified +
-            ", app='" + app + '\'' +
-            ", ip='" + ip + '\'' +
-            ", port=" + port +
-            ", hostname='" + hostname + '\'' +
-            ", lastFetch=" + lastFetch +
-            '}';
+        return "MetricPositionEntity{" + "id=" + id + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified
+                + ", app='" + app + '\'' + ", ip='" + ip + '\'' + ", port=" + port + ", hostname='" + hostname + '\''
+                + ", lastFetch=" + lastFetch + '}';
     }
 }

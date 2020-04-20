@@ -9,13 +9,12 @@ import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.PostConstruct;
-import java.util.List;
 
 /**
  * @author guifei.qin
@@ -28,7 +27,8 @@ import java.util.List;
 public class ZookeeperSentinelConfig {
 
     private final Logger logger = LoggerFactory.getLogger(ZookeeperSentinelConfig.class);
-
+    private final String FLOW_PATH = "/flow";
+    private final String DEGRADE_PATH = "/degrade";
     @Value("${zk.address}")
     private String zkAddress;
     @Value("${zk.sentinel.path}")
@@ -36,22 +36,21 @@ public class ZookeeperSentinelConfig {
     @Value("${zk.sentinel.appName}")
     private String appName;
 
-    private final String FLOW_PATH = "/flow";
-    private final String DEGRADE_PATH = "/degrade";
-
     @PostConstruct
     public void loadRules() {
         //限流Flow
-        ReadableDataSource<String, List<FlowRule>> flowRuleDataSource = new ZookeeperDataSource<>(zkAddress, zkPath + appName,
-                source -> JSON.parseObject(source, new TypeReference<List<FlowRule>>() {
-                }));
+        ReadableDataSource<String, List<FlowRule>> flowRuleDataSource = new ZookeeperDataSource<>(zkAddress,
+                zkPath + appName, source -> JSON.parseObject(source, new TypeReference<List<FlowRule>>() {
+        }));
         FlowRuleManager.register2Property(flowRuleDataSource.getProperty());
 
         //降级Degrade
         String degradePath = zkPath + appName + DEGRADE_PATH;
-        Converter<String, List<DegradeRule>> degradeRules = source -> JSON.parseObject(source, new TypeReference<List<DegradeRule>>() {
-        });
-        ReadableDataSource<String, List<DegradeRule>> zkDataSourceDegrade = new ZookeeperDataSource<>(zkAddress, degradePath, degradeRules);
+        Converter<String, List<DegradeRule>> degradeRules = source -> JSON.parseObject(source,
+                new TypeReference<List<DegradeRule>>() {
+                });
+        ReadableDataSource<String, List<DegradeRule>> zkDataSourceDegrade = new ZookeeperDataSource<>(zkAddress,
+                degradePath, degradeRules);
         DegradeRuleManager.register2Property(zkDataSourceDegrade.getProperty());
         logger.info("----------------- Sentinel DataSource Zookeeper Init Success -------------------");
     }
@@ -59,7 +58,7 @@ public class ZookeeperSentinelConfig {
 
     public String getFlowRulePath(String appName) {
         if (appName.startsWith("/")) {
-            return zkPath+appName+FLOW_PATH;
+            return zkPath + appName + FLOW_PATH;
         } else {
             return zkPath + "/" + appName + FLOW_PATH;
         }
@@ -67,7 +66,7 @@ public class ZookeeperSentinelConfig {
 
     public String getDegradeRulePath(String appName) {
         if (appName.startsWith("/")) {
-            return zkPath+appName+DEGRADE_PATH;
+            return zkPath + appName + DEGRADE_PATH;
         } else {
             return zkPath + "/" + appName + DEGRADE_PATH;
         }

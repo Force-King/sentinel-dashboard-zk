@@ -15,17 +15,16 @@
  */
 package com.alibaba.csp.sentinel.dashboard.domain.vo;
 
+import com.alibaba.csp.sentinel.command.vo.NodeVo;
+import com.alibaba.csp.sentinel.dashboard.domain.ResourceTreeNode;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.alibaba.csp.sentinel.command.vo.NodeVo;
-
-import com.alibaba.csp.sentinel.dashboard.domain.ResourceTreeNode;
 
 /**
  * @author leyou
  */
 public class ResourceVo {
+
     private String parentTtId;
     private String ttId;
     private String resource;
@@ -85,8 +84,7 @@ public class ResourceVo {
     }
 
     /**
-     * This node is visible when this.visible==true or one of this's parents is visible,
-     * root node is always invisible.
+     * This node is visible when this.visible==true or one of this's parents is visible, root node is always invisible.
      */
     private static void visit(ResourceTreeNode node, List<ResourceVo> list, boolean parentVisible, boolean isRoot) {
         boolean visible = !isRoot && (node.isVisible() || parentVisible);

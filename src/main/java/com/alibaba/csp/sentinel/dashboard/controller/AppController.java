@@ -15,18 +15,16 @@
  */
 package com.alibaba.csp.sentinel.dashboard.controller;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.alibaba.csp.sentinel.dashboard.discovery.AppInfo;
 import com.alibaba.csp.sentinel.dashboard.discovery.AppManagement;
 import com.alibaba.csp.sentinel.dashboard.discovery.MachineInfo;
 import com.alibaba.csp.sentinel.dashboard.domain.Result;
 import com.alibaba.csp.sentinel.dashboard.domain.vo.MachineInfoVo;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -64,23 +62,24 @@ public class AppController {
         }
         List<MachineInfo> list = new ArrayList<>(appInfo.getMachines());
         Collections.sort(list, (o1, o2) -> {
-            int t = o1.getApp().compareTo(o2.getApp());
+            int t = o1.getApp()
+                    .compareTo(o2.getApp());
             if (t != 0) {
                 return t;
             }
-            t = o1.getIp().compareTo(o2.getIp());
+            t = o1.getIp()
+                    .compareTo(o2.getIp());
             if (t != 0) {
                 return t;
             }
-            return o1.getPort().compareTo(o2.getPort());
+            return o1.getPort()
+                    .compareTo(o2.getPort());
         });
         return Result.ofSuccess(MachineInfoVo.fromMachineInfoList(list));
     }
-    
+
     @RequestMapping(value = "/{app}/machine/remove.json")
-    public Result<String> removeMachineById(
-            @PathVariable("app") String app,
-            @RequestParam(name = "ip") String ip,
+    public Result<String> removeMachineById(@PathVariable("app") String app, @RequestParam(name = "ip") String ip,
             @RequestParam(name = "port") int port) {
         AppInfo appInfo = appManagement.getDetailApp(app);
         if (appInfo == null) {

@@ -15,10 +15,9 @@
  */
 package com.alibaba.csp.sentinel.dashboard.domain.cluster;
 
+import com.alibaba.csp.sentinel.dashboard.domain.cluster.request.ClusterAppAssignMap;
 import java.util.List;
 import java.util.Set;
-
-import com.alibaba.csp.sentinel.dashboard.domain.cluster.request.ClusterAppAssignMap;
 
 /**
  * @author Eric Zhao
@@ -33,8 +32,7 @@ public class ClusterAppFullAssignRequest {
         return clusterMap;
     }
 
-    public ClusterAppFullAssignRequest setClusterMap(
-        List<ClusterAppAssignMap> clusterMap) {
+    public ClusterAppFullAssignRequest setClusterMap(List<ClusterAppAssignMap> clusterMap) {
         this.clusterMap = clusterMap;
         return this;
     }
@@ -50,9 +48,6 @@ public class ClusterAppFullAssignRequest {
 
     @Override
     public String toString() {
-        return "ClusterAppFullAssignRequest{" +
-            "clusterMap=" + clusterMap +
-            ", remainingList=" + remainingList +
-            '}';
+        return "ClusterAppFullAssignRequest{" + "clusterMap=" + clusterMap + ", remainingList=" + remainingList + '}';
     }
 }

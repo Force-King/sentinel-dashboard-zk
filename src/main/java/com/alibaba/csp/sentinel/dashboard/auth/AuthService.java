@@ -38,24 +38,19 @@ public interface AuthService<R> {
         /**
          * Read rule
          */
-        READ_RULE,
-        /**
+        READ_RULE, /**
          * Create or modify rule
          */
-        WRITE_RULE,
-        /**
+        WRITE_RULE, /**
          * Delete rule
          */
-        DELETE_RULE,
-        /**
+        DELETE_RULE, /**
          * Read metrics
          */
-        READ_METRIC,
-        /**
+        READ_METRIC, /**
          * Add machine
          */
-        ADD_MACHINE,
-        /**
+        ADD_MACHINE, /**
          * All privileges above are granted.
          */
         ALL
@@ -67,18 +62,16 @@ public interface AuthService<R> {
     interface AuthUser {
 
         /**
-         * Query whether current user has the specific privilege to the target, the target
-         * may be an app name or an ip address, or other destination.
+         * Query whether current user has the specific privilege to the target, the target may be an app name or an ip
+         * address, or other destination.
          * <p>
-         * This method will use return value to represent  whether user has the specific
-         * privileges to the target, but to throw a RuntimeException to represent no auth
-         * is also a good way.
+         * This method will use return value to represent  whether user has the specific privileges to the target, but
+         * to throw a RuntimeException to represent no auth is also a good way.
          * </p>
          *
-         * @param target        the target to check
+         * @param target the target to check
          * @param privilegeType the privilege type to check
-         * @return if current user has the specific privileges to the target, return true,
-         * otherwise return false.
+         * @return if current user has the specific privileges to the target, return true, otherwise return false.
          */
         boolean authTarget(String target, PrivilegeType privilegeType);
 

@@ -15,14 +15,13 @@
  */
 package com.alibaba.csp.sentinel.dashboard.discovery;
 
+import com.alibaba.csp.sentinel.dashboard.config.DashboardConfig;
 import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import com.alibaba.csp.sentinel.dashboard.config.DashboardConfig;
 
 public class AppInfo {
 
@@ -30,7 +29,8 @@ public class AppInfo {
 
     private Set<MachineInfo> machines = ConcurrentHashMap.newKeySet();
 
-    public AppInfo() {}
+    public AppInfo() {
+    }
 
     public AppInfo(String app) {
         this.app = app;
@@ -67,7 +67,8 @@ public class AppInfo {
         Iterator<MachineInfo> it = machines.iterator();
         while (it.hasNext()) {
             MachineInfo machine = it.next();
-            if (machine.getIp().equals(ip) && machine.getPort() == port) {
+            if (machine.getIp()
+                    .equals(ip) && machine.getPort() == port) {
                 it.remove();
                 return true;
             }
@@ -77,8 +78,10 @@ public class AppInfo {
 
     public Optional<MachineInfo> getMachine(String ip, int port) {
         return machines.stream()
-            .filter(e -> e.getIp().equals(ip) && e.getPort().equals(port))
-            .findFirst();
+                .filter(e -> e.getIp()
+                        .equals(ip) && e.getPort()
+                        .equals(port))
+                .findFirst();
     }
 
     private boolean heartbeatJudge(final int threshold) {
@@ -87,14 +90,14 @@ public class AppInfo {
         }
         if (threshold > 0) {
             long healthyCount = machines.stream()
-                .filter(MachineInfo::isHealthy)
-                .count();
+                    .filter(MachineInfo::isHealthy)
+                    .count();
             if (healthyCount == 0) {
                 // No healthy machines.
                 return machines.stream()
-                    .max(Comparator.comparingLong(MachineInfo::getLastHeartbeat))
-                    .map(e -> System.currentTimeMillis() - e.getLastHeartbeat() < threshold)
-                    .orElse(false);
+                        .max(Comparator.comparingLong(MachineInfo::getLastHeartbeat))
+                        .map(e -> System.currentTimeMillis() - e.getLastHeartbeat() < threshold)
+                        .orElse(false);
             }
         }
         return true;

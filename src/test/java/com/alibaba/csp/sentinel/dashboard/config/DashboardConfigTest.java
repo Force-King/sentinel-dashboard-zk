@@ -22,6 +22,7 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
 
 public class DashboardConfigTest {
+
     @Rule
     public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
@@ -56,7 +57,7 @@ public class DashboardConfigTest {
         assertEquals(0, DashboardConfig.getConfigInt("t", 0, 10));
         DashboardConfig.clearCache();
         assertEquals(1, DashboardConfig.getConfigInt("t", 1, 10));
-        
+
         // property, wrong format
         System.setProperty("t", "asdf");
         DashboardConfig.clearCache();
@@ -64,7 +65,7 @@ public class DashboardConfigTest {
         System.setProperty("t", "");
         DashboardConfig.clearCache();
         assertEquals(0, DashboardConfig.getConfigInt("t", 0, 10));
-        
+
         // min value
         System.setProperty("t", "2");
         DashboardConfig.clearCache();
@@ -73,24 +74,24 @@ public class DashboardConfigTest {
         assertEquals(10, DashboardConfig.getConfigInt("t", 0, 10));
         DashboardConfig.clearCache();
         assertEquals(2, DashboardConfig.getConfigInt("t", 0, -1));
-        
+
         // env
         environmentVariables.set("t", "20");
         DashboardConfig.clearCache();
         assertEquals(20, DashboardConfig.getConfigInt("t", 0, 10));
-        
+
         // wrong format env var, but it will override property
         environmentVariables.set("t", "20dddd");
         DashboardConfig.clearCache();
         assertEquals(0, DashboardConfig.getConfigInt("t", 0, 10));
-        
+
         // clear env, it will take property
         environmentVariables.set("t", "");
         DashboardConfig.clearCache();
         assertEquals(10, DashboardConfig.getConfigInt("t", 0, 10));
         DashboardConfig.clearCache();
         assertEquals(2, DashboardConfig.getConfigInt("t", 0, 1));
-        
+
         // enable cache
         System.setProperty("t", "666");
         DashboardConfig.clearCache();

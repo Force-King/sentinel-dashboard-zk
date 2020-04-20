@@ -21,6 +21,7 @@ import java.util.Date;
  * @author leyou
  */
 public class MetricEntity {
+
     private Long id;
     private Date gmtCreate;
     private Date gmtModified;
@@ -89,8 +90,7 @@ public class MetricEntity {
     /**
      * {@link #rt} = {@code avgRt * successQps}
      *
-     * @param avgRt      average rt of {@code successQps}
-     * @param successQps
+     * @param avgRt average rt of {@code successQps}
      */
     public synchronized void setRtAndSuccessQps(double avgRt, Long successQps) {
         this.rt = avgRt * successQps;
@@ -200,21 +200,10 @@ public class MetricEntity {
 
     @Override
     public String toString() {
-        return "MetricEntity{" +
-            "id=" + id +
-            ", gmtCreate=" + gmtCreate +
-            ", gmtModified=" + gmtModified +
-            ", app='" + app + '\'' +
-            ", timestamp=" + timestamp +
-            ", resource='" + resource + '\'' +
-            ", passQps=" + passQps +
-            ", blockQps=" + blockQps +
-            ", successQps=" + successQps +
-            ", exceptionQps=" + exceptionQps +
-            ", rt=" + rt +
-            ", count=" + count +
-            ", resourceCode=" + resourceCode +
-            '}';
+        return "MetricEntity{" + "id=" + id + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified + ", app='"
+                + app + '\'' + ", timestamp=" + timestamp + ", resource='" + resource + '\'' + ", passQps=" + passQps
+                + ", blockQps=" + blockQps + ", successQps=" + successQps + ", exceptionQps=" + exceptionQps + ", rt="
+                + rt + ", count=" + count + ", resourceCode=" + resourceCode + '}';
     }
 
 }

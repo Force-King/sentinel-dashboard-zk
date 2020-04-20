@@ -15,16 +15,16 @@
  */
 package com.alibaba.csp.sentinel.dashboard.domain.vo;
 
+import com.alibaba.csp.sentinel.dashboard.datasource.entity.MetricEntity;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
-import com.alibaba.csp.sentinel.dashboard.datasource.entity.MetricEntity;
 
 /**
  * @author leyou
  */
 public class MetricVo implements Comparable<MetricVo> {
+
     private Long id;
     private String app;
     private Long timestamp;
@@ -58,13 +58,13 @@ public class MetricVo implements Comparable<MetricVo> {
      *
      * @param entities 通过hashCode查找到的MetricEntities
      * @param identity 真正需要查找的资源名
-     * @return
      */
     public static List<MetricVo> fromMetricEntities(Collection<MetricEntity> entities, String identity) {
         List<MetricVo> list = new ArrayList<>();
         if (entities != null) {
             for (MetricEntity entity : entities) {
-                if (entity.getResource().equals(identity)) {
+                if (entity.getResource()
+                        .equals(identity)) {
                     list.add(fromMetricEntity(entity));
                 }
             }
@@ -76,8 +76,10 @@ public class MetricVo implements Comparable<MetricVo> {
         MetricVo vo = new MetricVo();
         vo.id = entity.getId();
         vo.app = entity.getApp();
-        vo.timestamp = entity.getTimestamp().getTime();
-        vo.gmtCreate = entity.getGmtCreate().getTime();
+        vo.timestamp = entity.getTimestamp()
+                .getTime();
+        vo.gmtCreate = entity.getGmtCreate()
+                .getTime();
         vo.resource = entity.getResource();
         vo.passQps = entity.getPassQps();
         vo.blockQps = entity.getBlockQps();

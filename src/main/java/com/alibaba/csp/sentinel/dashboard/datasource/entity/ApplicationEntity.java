@@ -15,9 +15,8 @@
  */
 package com.alibaba.csp.sentinel.dashboard.datasource.entity;
 
-import java.util.Date;
-
 import com.alibaba.csp.sentinel.dashboard.discovery.AppInfo;
+import java.util.Date;
 
 /**
  * @author leyou
@@ -67,6 +66,10 @@ public class ApplicationEntity {
         return activeConsole;
     }
 
+    public void setActiveConsole(String activeConsole) {
+        this.activeConsole = activeConsole;
+    }
+
     public Date getLastFetch() {
         return lastFetch;
     }
@@ -75,23 +78,14 @@ public class ApplicationEntity {
         this.lastFetch = lastFetch;
     }
 
-    public void setActiveConsole(String activeConsole) {
-        this.activeConsole = activeConsole;
-    }
-
     public AppInfo toAppInfo() {
         return new AppInfo(app);
     }
 
     @Override
     public String toString() {
-        return "ApplicationEntity{" +
-            "id=" + id +
-            ", gmtCreate=" + gmtCreate +
-            ", gmtModified=" + gmtModified +
-            ", app='" + app + '\'' +
-            ", activeConsole='" + activeConsole + '\'' +
-            ", lastFetch=" + lastFetch +
-            '}';
+        return "ApplicationEntity{" + "id=" + id + ", gmtCreate=" + gmtCreate + ", gmtModified=" + gmtModified
+                + ", app='" + app + '\'' + ", activeConsole='" + activeConsole + '\'' + ", lastFetch=" + lastFetch
+                + '}';
     }
 }

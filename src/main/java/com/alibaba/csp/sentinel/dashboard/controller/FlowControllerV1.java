@@ -15,22 +15,18 @@
  */
 package com.alibaba.csp.sentinel.dashboard.controller;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import com.alibaba.csp.sentinel.dashboard.auth.AuthService;
 import com.alibaba.csp.sentinel.dashboard.auth.AuthService.AuthUser;
 import com.alibaba.csp.sentinel.dashboard.auth.AuthService.PrivilegeType;
-import com.alibaba.csp.sentinel.util.StringUtil;
-
 import com.alibaba.csp.sentinel.dashboard.client.SentinelApiClient;
 import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.FlowRuleEntity;
 import com.alibaba.csp.sentinel.dashboard.discovery.MachineInfo;
 import com.alibaba.csp.sentinel.dashboard.domain.Result;
 import com.alibaba.csp.sentinel.dashboard.repository.rule.InMemoryRuleRepositoryAdapter;
-
+import com.alibaba.csp.sentinel.util.StringUtil;
+import java.util.Date;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,10 +60,8 @@ public class FlowControllerV1 {
     private SentinelApiClient sentinelApiClient;
 
     @GetMapping("/rules")
-    public Result<List<FlowRuleEntity>> apiQueryMachineRules(HttpServletRequest request,
-                                                             @RequestParam String app,
-                                                             @RequestParam String ip,
-                                                             @RequestParam Integer port) {
+    public Result<List<FlowRuleEntity>> apiQueryMachineRules(HttpServletRequest request, @RequestParam String app,
+            @RequestParam String ip, @RequestParam Integer port) {
         AuthUser authUser = authService.getAuthUser(request);
         authUser.authTarget(app, PrivilegeType.READ_RULE);
 
@@ -150,8 +144,10 @@ public class FlowControllerV1 {
         Date date = new Date();
         entity.setGmtCreate(date);
         entity.setGmtModified(date);
-        entity.setLimitApp(entity.getLimitApp().trim());
-        entity.setResource(entity.getResource().trim());
+        entity.setLimitApp(entity.getLimitApp()
+                .trim());
+        entity.setResource(entity.getResource()
+                .trim());
         try {
             entity = repository.save(entity);
         } catch (Throwable throwable) {
@@ -165,11 +161,9 @@ public class FlowControllerV1 {
     }
 
     @PutMapping("/save.json")
-    public Result<FlowRuleEntity> updateIfNotNull(HttpServletRequest request, Long id, String app,
-                                                  String limitApp, String resource, Integer grade,
-                                                  Double count, Integer strategy, String refResource,
-                                                  Integer controlBehavior, Integer warmUpPeriodSec,
-                                                  Integer maxQueueingTimeMs) {
+    public Result<FlowRuleEntity> updateIfNotNull(HttpServletRequest request, Long id, String app, String limitApp,
+            String resource, Integer grade, Double count, Integer strategy, String refResource, Integer controlBehavior,
+            Integer warmUpPeriodSec, Integer maxQueueingTimeMs) {
         AuthUser authUser = authService.getAuthUser(request);
         authUser.authTarget(app, PrivilegeType.WRITE_RULE);
 

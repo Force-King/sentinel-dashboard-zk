@@ -21,7 +21,8 @@ package com.alibaba.csp.sentinel.dashboard.client;
  */
 public class CommandNotFoundException extends Exception {
 
-    public CommandNotFoundException() { }
+    public CommandNotFoundException() {
+    }
 
     public CommandNotFoundException(String message) {
         super(message);

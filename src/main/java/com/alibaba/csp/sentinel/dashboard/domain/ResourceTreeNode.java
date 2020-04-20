@@ -15,17 +15,17 @@
  */
 package com.alibaba.csp.sentinel.dashboard.domain;
 
+import com.alibaba.csp.sentinel.command.vo.NodeVo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.alibaba.csp.sentinel.command.vo.NodeVo;
-
 /**
  * @author leyou
  */
 public class ResourceTreeNode {
+
     private String id;
     private String parentId;
     private String resource;
@@ -91,13 +91,12 @@ public class ResourceTreeNode {
     }
 
     /**
-     * This node is visible only when searchKey matches this.resource or at least
-     * one of this's children is visible
+     * This node is visible only when searchKey matches this.resource or at least one of this's children is visible
      */
     private boolean search(ResourceTreeNode node, String searchKey) {
         // empty matches all
-        if (searchKey == null || searchKey.isEmpty() ||
-            node.resource.toLowerCase().contains(searchKey.toLowerCase())) {
+        if (searchKey == null || searchKey.isEmpty() || node.resource.toLowerCase()
+                .contains(searchKey.toLowerCase())) {
             node.visible = true;
         } else {
             node.visible = false;

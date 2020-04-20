@@ -17,6 +17,7 @@ package com.alibaba.csp.sentinel.dashboard.config;
 
 import com.alibaba.csp.sentinel.adapter.servlet.CommonFilter;
 import com.alibaba.csp.sentinel.dashboard.filter.AuthFilter;
+import javax.servlet.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import javax.servlet.Filter;
 
 /**
  * @author leyou
@@ -42,17 +41,18 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/resources/");
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/resources/");
     }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("forward:/index.htm");
+        registry.addViewController("/")
+                .setViewName("forward:/index.htm");
     }
 
     /**
-     * Add {@link CommonFilter} to the server, this is the simplest way to use Sentinel
-     * for Web application.
+     * Add {@link CommonFilter} to the server, this is the simplest way to use Sentinel for Web application.
      */
     @Bean
     public FilterRegistrationBean sentinelFilterRegistration() {

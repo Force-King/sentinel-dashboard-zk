@@ -54,10 +54,7 @@ public class ClusterRequestLimitVO {
 
     @Override
     public String toString() {
-        return "ClusterRequestLimitVO{" +
-            "namespace='" + namespace + '\'' +
-            ", currentQps=" + currentQps +
-            ", maxAllowedQps=" + maxAllowedQps +
-            '}';
+        return "ClusterRequestLimitVO{" + "namespace='" + namespace + '\'' + ", currentQps=" + currentQps
+                + ", maxAllowedQps=" + maxAllowedQps + '}';
     }
 }

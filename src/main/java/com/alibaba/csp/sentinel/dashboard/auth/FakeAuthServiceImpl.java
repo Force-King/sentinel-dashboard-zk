@@ -16,7 +16,6 @@
 package com.alibaba.csp.sentinel.dashboard.auth;
 
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.stereotype.Component;
 
 /**

@@ -1,4 +1,3 @@
-
 <div class="row" style="margin-left: 1px; margin-top:10px; height: 50px;">
   <div class="col-md-6" style="margin-bottom: 10px;">
     <span style="font-size: 30px;font-weight: bold;">{{app}}</span>
@@ -14,7 +13,8 @@
           <span class="brand" style="font-size: 13px;">集群限流</span>
           <input class="form-control witdh-200" placeholder="机器搜索" ng-model="searchKey">
           <div class="control-group" style="float:right;margin-right: 10px;margin-bottom: -10px;">
-            <selectize id="gsInput" class="selectize-input-200" config="macsInputConfig" options="macsInputOptions" ng-model="macInputModel"
+            <selectize id="gsInput" class="selectize-input-200" config="macsInputConfig"
+                       options="macsInputOptions" ng-model="macInputModel"
                        placeholder="机器"></selectize>
           </div>
         </div>
@@ -33,20 +33,25 @@
         </div>
 
         <!--.tools-header -->
-        <div class="card-body" style="padding: 0px 0px;"  ng-if="!loadError">
+        <div class="card-body" style="padding: 0px 0px;" ng-if="!loadError">
           <form role="form" class="form-horizontal">
             <div class="form-group">
               <label class="col-sm-2 control-label">当前模式</label>
-              <p class="col-sm-6 control-label" style="text-align: left; font-weight: normal;" ng-if="stateVO.currentMode == 0">Client</p>
-              <p class="col-sm-6 control-label" style="text-align: left; font-weight: normal;" ng-if="stateVO.currentMode == 1">Server</p>
-              <p class="col-sm-6 control-label" style="text-align: left; font-weight: normal;" ng-if="stateVO.currentMode == -1">未开启</p>
+              <p class="col-sm-6 control-label" style="text-align: left; font-weight: normal;"
+                 ng-if="stateVO.currentMode == 0">Client</p>
+              <p class="col-sm-6 control-label" style="text-align: left; font-weight: normal;"
+                 ng-if="stateVO.currentMode == 1">Server</p>
+              <p class="col-sm-6 control-label" style="text-align: left; font-weight: normal;"
+                 ng-if="stateVO.currentMode == -1">未开启</p>
             </div>
             <div class="form-group">
               <label class="col-sm-2 control-label">集群限流模式变换</label>
               <div class="col-sm-4">
                 <div class="form-control highlight-border" align="center">
-                  <input type="radio" name="mode" value="0" ng-model='stateVO.stateInfo.mode' ng-disabled="!stateVO.stateInfo.clientAvailable" />&nbsp;Client&nbsp;&nbsp;
-                  <input type="radio" name="mode" value="1" ng-model='stateVO.stateInfo.mode' ng-disabled="!stateVO.stateInfo.serverAvailable" />&nbsp;Server
+                  <input type="radio" name="mode" value="0" ng-model='stateVO.stateInfo.mode'
+                         ng-disabled="!stateVO.stateInfo.clientAvailable"/>&nbsp;Client&nbsp;&nbsp;
+                  <input type="radio" name="mode" value="1" ng-model='stateVO.stateInfo.mode'
+                         ng-disabled="!stateVO.stateInfo.serverAvailable"/>&nbsp;Server
                 </div>
               </div>
             </div>
@@ -79,7 +84,8 @@
             <div class="separator"></div>
             <div clss="row" style="margin-top: 20px;">
               <button style="margin: 0 10px 10px 10px;" class="btn btn-outline-success"
-                      ng-click="saveConfig()">保存配置</button>
+                      ng-click="saveConfig()">保存配置
+              </button>
             </div>
           </div>
 

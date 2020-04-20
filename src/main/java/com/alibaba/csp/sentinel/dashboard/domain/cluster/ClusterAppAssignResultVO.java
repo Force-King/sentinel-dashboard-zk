@@ -57,10 +57,7 @@ public class ClusterAppAssignResultVO {
 
     @Override
     public String toString() {
-        return "ClusterAppAssignResultVO{" +
-            "failedServerSet=" + failedServerSet +
-            ", failedClientSet=" + failedClientSet +
-            ", totalCount=" + totalCount +
-            '}';
+        return "ClusterAppAssignResultVO{" + "failedServerSet=" + failedServerSet + ", failedClientSet="
+                + failedClientSet + ", totalCount=" + totalCount + '}';
     }
 }

@@ -15,15 +15,17 @@
  */
 package com.alibaba.csp.sentinel.dashboard.util;
 
-import java.util.Optional;
-
 import com.alibaba.csp.sentinel.util.StringUtil;
 import com.alibaba.csp.sentinel.util.function.Tuple2;
+import java.util.Optional;
 
 /**
  * @author Eric Zhao
  */
 public final class MachineUtils {
+
+    private MachineUtils() {
+    }
 
     public static Optional<Integer> parseCommandPort(String machineIp) {
         try {
@@ -54,6 +56,4 @@ public final class MachineUtils {
             return Optional.empty();
         }
     }
-
-    private MachineUtils() {}
 }

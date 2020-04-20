@@ -15,14 +15,12 @@
  */
 package com.alibaba.csp.sentinel.dashboard.datasource.entity.rule;
 
-import java.util.List;
-
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowClusterConfig;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowItem;
 import com.alibaba.csp.sentinel.slots.block.flow.param.ParamFlowRule;
 import com.alibaba.csp.sentinel.util.AssertUtil;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.List;
 
 /**
  * @author Eric Zhao
@@ -30,7 +28,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class ParamFlowRuleEntity extends AbstractRuleEntity<ParamFlowRule> {
 
-    public ParamFlowRuleEntity() {}
+    public ParamFlowRuleEntity() {
+    }
 
     public ParamFlowRuleEntity(ParamFlowRule rule) {
         AssertUtil.notNull(rule, "Authority rule should not be null");

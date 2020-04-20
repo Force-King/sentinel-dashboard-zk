@@ -17,7 +17,6 @@ package com.alibaba.csp.sentinel.dashboard.config;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.springframework.lang.NonNull;
@@ -25,9 +24,7 @@ import org.springframework.lang.NonNull;
 /**
  * <p>Dashboard local config support.</p>
  * <p>
- * Dashboard supports configuration loading by several ways by order:<br>
- * 1. System.properties<br>
- * 2. Env
+ * Dashboard supports configuration loading by several ways by order:<br> 1. System.properties<br> 2. Env
  * </p>
  *
  * @author jason
@@ -69,7 +66,7 @@ public class DashboardConfig {
     public static final String CONFIG_AUTO_REMOVE_MACHINE_MILLIS = "sentinel.dashboard.autoRemoveMachineMillis";
 
     private static final ConcurrentMap<String, Object> cacheMap = new ConcurrentHashMap<>();
-    
+
     @NonNull
     private static String getConfig(String name) {
         // env
@@ -102,7 +99,7 @@ public class DashboardConfig {
 
     protected static int getConfigInt(String name, int defaultVal, int minVal) {
         if (cacheMap.containsKey(name)) {
-            return (int)cacheMap.get(name);
+            return (int) cacheMap.get(name);
         }
         int val = NumberUtils.toInt(getConfig(name));
         if (val == 0) {
@@ -125,19 +122,19 @@ public class DashboardConfig {
     public static int getHideAppNoMachineMillis() {
         return getConfigInt(CONFIG_HIDE_APP_NO_MACHINE_MILLIS, 0, 60000);
     }
-    
+
     public static int getRemoveAppNoMachineMillis() {
         return getConfigInt(CONFIG_REMOVE_APP_NO_MACHINE_MILLIS, 0, 120000);
     }
-    
+
     public static int getAutoRemoveMachineMillis() {
         return getConfigInt(CONFIG_AUTO_REMOVE_MACHINE_MILLIS, 0, 300000);
     }
-    
+
     public static int getUnhealthyMachineMillis() {
         return getConfigInt(CONFIG_UNHEALTHY_MACHINE_MILLIS, DEFAULT_MACHINE_HEALTHY_TIMEOUT_MS, 30000);
     }
-    
+
     public static void clearCache() {
         cacheMap.clear();
     }

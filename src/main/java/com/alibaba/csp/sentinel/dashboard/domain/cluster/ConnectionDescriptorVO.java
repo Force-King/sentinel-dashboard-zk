@@ -45,9 +45,6 @@ public class ConnectionDescriptorVO {
 
     @Override
     public String toString() {
-        return "ConnectionDescriptorVO{" +
-            "address='" + address + '\'' +
-            ", host='" + host + '\'' +
-            '}';
+        return "ConnectionDescriptorVO{" + "address='" + address + '\'' + ", host='" + host + '\'' + '}';
     }
 }

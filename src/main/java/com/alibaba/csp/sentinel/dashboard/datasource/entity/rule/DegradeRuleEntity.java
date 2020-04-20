@@ -15,14 +15,14 @@
  */
 package com.alibaba.csp.sentinel.dashboard.datasource.entity.rule;
 
-import java.util.Date;
-
 import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRule;
+import java.util.Date;
 
 /**
  * @author leyou
  */
 public class DegradeRuleEntity implements RuleEntity {
+
     private Long id;
     private String app;
     private String ip;

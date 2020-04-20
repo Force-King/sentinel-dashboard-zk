@@ -42,10 +42,10 @@ public interface MetricsRepository<T> {
     /**
      * Get all metrics by {@code appName} and {@code resourceName} between a period of time.
      *
-     * @param app       application name for Sentinel
-     * @param resource  resource name
+     * @param app application name for Sentinel
+     * @param resource resource name
      * @param startTime start timestamp
-     * @param endTime   end timestamp
+     * @param endTime end timestamp
      * @return all metrics in query conditions
      */
     List<T> queryByAppAndResourceBetween(String app, String resource, long startTime, long endTime);

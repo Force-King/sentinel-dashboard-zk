@@ -1,10 +1,14 @@
 package com.alibaba.csp.sentinel.dashboard.datasource.entity;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 public class SentinelVersionTest {
+
     @Test
     public void testEqual() {
         assertEquals(new SentinelVersion(1, 0, 0), new SentinelVersion(1, 0, 0));
@@ -14,7 +18,7 @@ public class SentinelVersionTest {
         assertNotEquals(new SentinelVersion(1, 0, 0, ""), new SentinelVersion(1, 0, 0, null));
         assertEquals(new SentinelVersion(1, 0, 0, null), new SentinelVersion(1, 0, 0, null));
     }
-    
+
     @Test
     public void testGreater() {
         assertTrue(new SentinelVersion(2, 0, 0).greaterThan(new SentinelVersion(1, 0, 0)));

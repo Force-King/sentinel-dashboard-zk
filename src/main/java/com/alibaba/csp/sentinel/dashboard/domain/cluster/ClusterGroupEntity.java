@@ -80,12 +80,7 @@ public class ClusterGroupEntity {
 
     @Override
     public String toString() {
-        return "ClusterGroupEntity{" +
-            "machineId='" + machineId + '\'' +
-            ", ip='" + ip + '\'' +
-            ", port=" + port +
-            ", clientSet=" + clientSet +
-            ", belongToApp=" + belongToApp +
-            '}';
+        return "ClusterGroupEntity{" + "machineId='" + machineId + '\'' + ", ip='" + ip + '\'' + ", port=" + port
+                + ", clientSet=" + clientSet + ", belongToApp=" + belongToApp + '}';
     }
 }

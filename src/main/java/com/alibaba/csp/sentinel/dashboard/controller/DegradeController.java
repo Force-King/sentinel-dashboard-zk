@@ -15,24 +15,20 @@
  */
 package com.alibaba.csp.sentinel.dashboard.controller;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
-import com.alibaba.csp.sentinel.dashboard.client.SentinelApiClient;
 import com.alibaba.csp.sentinel.dashboard.auth.AuthService;
 import com.alibaba.csp.sentinel.dashboard.auth.AuthService.AuthUser;
 import com.alibaba.csp.sentinel.dashboard.auth.AuthService.PrivilegeType;
+import com.alibaba.csp.sentinel.dashboard.client.SentinelApiClient;
+import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.DegradeRuleEntity;
+import com.alibaba.csp.sentinel.dashboard.domain.Result;
+import com.alibaba.csp.sentinel.dashboard.repository.rule.InMemDegradeRuleStore;
 import com.alibaba.csp.sentinel.dashboard.rule.DynamicRuleProvider;
 import com.alibaba.csp.sentinel.dashboard.rule.DynamicRulePublisher;
 import com.alibaba.csp.sentinel.slots.block.RuleConstant;
 import com.alibaba.csp.sentinel.util.StringUtil;
-
-import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.DegradeRuleEntity;
-import com.alibaba.csp.sentinel.dashboard.domain.Result;
-import com.alibaba.csp.sentinel.dashboard.repository.rule.InMemDegradeRuleStore;
-
+import java.util.Date;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +41,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * Degrade rule controller
+ *
  * @author guifei.qin
  */
 @Controller
@@ -73,7 +70,8 @@ public class DegradeController {
 
     @ResponseBody
     @RequestMapping("/rules.json")
-    public Result<List<DegradeRuleEntity>> queryMachineRules(HttpServletRequest request, String app, String ip, Integer port) {
+    public Result<List<DegradeRuleEntity>> queryMachineRules(HttpServletRequest request, String app, String ip,
+            Integer port) {
         AuthUser authUser = authService.getAuthUser(request);
         authUser.authTarget(app, PrivilegeType.READ_RULE);
 
@@ -105,11 +103,10 @@ public class DegradeController {
 
     @ResponseBody
     @RequestMapping("/new.json")
-    public Result<DegradeRuleEntity> add(HttpServletRequest request,
-                                         String app, String ip, Integer port, String limitApp, String resource,
-                                         Double count, Integer timeWindow, Integer grade) {
+    public Result<DegradeRuleEntity> add(HttpServletRequest request, String app, String ip, Integer port,
+            String limitApp, String resource, Double count, Integer timeWindow, Integer grade) {
         AuthUser authUser = authService.getAuthUser(request);
-        if(!adminUsername.equals(authUser.getLoginName())) {
+        if (!adminUsername.equals(authUser.getLoginName())) {
             return Result.ofFail(-2, "您不是管理员，没有该权限！");
         }
         authUser.authTarget(app, PrivilegeType.WRITE_RULE);
@@ -166,11 +163,10 @@ public class DegradeController {
 
     @ResponseBody
     @RequestMapping("/save.json")
-    public Result<DegradeRuleEntity> updateIfNotNull(HttpServletRequest request,
-                                                     Long id, String app, String limitApp, String resource,
-                                                     Double count, Integer timeWindow, Integer grade) {
+    public Result<DegradeRuleEntity> updateIfNotNull(HttpServletRequest request, Long id, String app, String limitApp,
+            String resource, Double count, Integer timeWindow, Integer grade) {
         AuthUser authUser = authService.getAuthUser(request);
-        if(!adminUsername.equals(authUser.getLoginName())) {
+        if (!adminUsername.equals(authUser.getLoginName())) {
             return Result.ofFail(-2, "您不是管理员，没有该权限！");
         }
         if (id == null) {
@@ -224,7 +220,7 @@ public class DegradeController {
     @RequestMapping("/delete.json")
     public Result<Long> delete(HttpServletRequest request, Long id) {
         AuthUser authUser = authService.getAuthUser(request);
-        if(!adminUsername.equals(authUser.getLoginName())) {
+        if (!adminUsername.equals(authUser.getLoginName())) {
             return Result.ofFail(-2, "您不是管理员，没有该权限！");
         }
         if (id == null) {

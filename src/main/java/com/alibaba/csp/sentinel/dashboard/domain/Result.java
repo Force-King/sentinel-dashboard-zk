@@ -27,16 +27,14 @@ public class Result<R> {
     private R data;
 
     public static <R> Result<R> ofSuccess(R data) {
-        return new Result<R>()
-            .setSuccess(true)
-            .setMsg("success")
-            .setData(data);
+        return new Result<R>().setSuccess(true)
+                .setMsg("success")
+                .setData(data);
     }
 
     public static <R> Result<R> ofSuccessMsg(String msg) {
-        return new Result<R>()
-            .setSuccess(true)
-            .setMsg(msg);
+        return new Result<R>().setSuccess(true)
+                .setMsg(msg);
     }
 
     public static <R> Result<R> ofFail(int code, String msg) {
@@ -51,7 +49,8 @@ public class Result<R> {
         Result<R> result = new Result<>();
         result.setSuccess(false);
         result.setCode(code);
-        result.setMsg(throwable.getClass().getName() + ", " + throwable.getMessage());
+        result.setMsg(throwable.getClass()
+                .getName() + ", " + throwable.getMessage());
         return result;
     }
 
@@ -93,11 +92,6 @@ public class Result<R> {
 
     @Override
     public String toString() {
-        return "Result{" +
-            "success=" + success +
-            ", code=" + code +
-            ", msg='" + msg + '\'' +
-            ", data=" + data +
-            '}';
+        return "Result{" + "success=" + success + ", code=" + code + ", msg='" + msg + '\'' + ", data=" + data + '}';
     }
 }

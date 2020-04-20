@@ -15,16 +15,13 @@
  */
 package com.alibaba.csp.sentinel.dashboard.rule.apollo;
 
-import java.util.List;
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.FlowRuleEntity;
 import com.alibaba.csp.sentinel.datasource.Converter;
 import com.alibaba.fastjson.JSON;
-
 import com.ctrip.framework.apollo.openapi.client.ApolloOpenApiClient;
+import java.util.List;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author hantianwei@gmail.com
@@ -46,9 +43,9 @@ public class ApolloConfig {
     @Bean
     public ApolloOpenApiClient apolloOpenApiClient() {
         ApolloOpenApiClient client = ApolloOpenApiClient.newBuilder()
-            .withPortalUrl("http://localhost:10034")
-            .withToken("token")
-            .build();
+                .withPortalUrl("http://localhost:10034")
+                .withToken("token")
+                .build();
         return client;
 
     }

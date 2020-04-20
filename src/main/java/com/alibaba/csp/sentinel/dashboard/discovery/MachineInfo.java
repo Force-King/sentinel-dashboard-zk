@@ -15,10 +15,9 @@
  */
 package com.alibaba.csp.sentinel.dashboard.discovery;
 
-import java.util.Objects;
-
 import com.alibaba.csp.sentinel.dashboard.config.DashboardConfig;
 import com.alibaba.csp.sentinel.util.StringUtil;
+import java.util.Objects;
 
 public class MachineInfo implements Comparable<MachineInfo> {
 
@@ -81,7 +80,7 @@ public class MachineInfo implements Comparable<MachineInfo> {
     public long getHeartbeatVersion() {
         return heartbeatVersion;
     }
-    
+
     public void setHeartbeatVersion(long heartbeatVersion) {
         this.heartbeatVersion = heartbeatVersion;
     }
@@ -94,16 +93,14 @@ public class MachineInfo implements Comparable<MachineInfo> {
         this.version = version;
         return this;
     }
-    
+
     public boolean isHealthy() {
         long delta = System.currentTimeMillis() - lastHeartbeat;
         return delta < DashboardConfig.getUnhealthyMachineMillis();
     }
-    
+
     /**
      * whether dead should be removed
-     * 
-     * @return
      */
     public boolean isDead() {
         if (DashboardConfig.getAutoRemoveMachineMillis() > 0) {
@@ -112,11 +109,11 @@ public class MachineInfo implements Comparable<MachineInfo> {
         }
         return false;
     }
-    
+
     public long getLastHeartbeat() {
         return lastHeartbeat;
     }
-    
+
     public void setLastHeartbeat(long lastHeartbeat) {
         this.lastHeartbeat = lastHeartbeat;
     }
@@ -137,26 +134,40 @@ public class MachineInfo implements Comparable<MachineInfo> {
 
     @Override
     public String toString() {
-        return new StringBuilder("MachineInfo {")
-            .append("app='").append(app).append('\'')
-            .append(", hostname='").append(hostname).append('\'')
-            .append(", ip='").append(ip).append('\'')
-            .append(", port=").append(port)
-            .append(", heartbeatVersion=").append(heartbeatVersion)
-            .append(", lastHeartbeat=").append(lastHeartbeat)
-            .append(", version='").append(version).append('\'')
-            .append(", healthy=").append(isHealthy())
-            .append('}').toString();
+        return new StringBuilder("MachineInfo {").append("app='")
+                .append(app)
+                .append('\'')
+                .append(", hostname='")
+                .append(hostname)
+                .append('\'')
+                .append(", ip='")
+                .append(ip)
+                .append('\'')
+                .append(", port=")
+                .append(port)
+                .append(", heartbeatVersion=")
+                .append(heartbeatVersion)
+                .append(", lastHeartbeat=")
+                .append(lastHeartbeat)
+                .append(", version='")
+                .append(version)
+                .append('\'')
+                .append(", healthy=")
+                .append(isHealthy())
+                .append('}')
+                .toString();
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) { return true; }
-        if (!(o instanceof MachineInfo)) { return false; }
-        MachineInfo that = (MachineInfo)o;
-        return Objects.equals(app, that.app) &&
-            Objects.equals(ip, that.ip) &&
-            Objects.equals(port, that.port);
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof MachineInfo)) {
+            return false;
+        }
+        MachineInfo that = (MachineInfo) o;
+        return Objects.equals(app, that.app) && Objects.equals(ip, that.ip) && Objects.equals(port, that.port);
     }
 
     @Override
@@ -166,8 +177,6 @@ public class MachineInfo implements Comparable<MachineInfo> {
 
     /**
      * Information for log
-     *
-     * @return
      */
     public String toLogString() {
         return app + "|" + ip + "|" + port + "|" + version;

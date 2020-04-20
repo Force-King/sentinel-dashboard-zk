@@ -17,7 +17,6 @@ package com.alibaba.csp.sentinel.dashboard.datasource.entity.rule;
 
 import com.alibaba.csp.sentinel.slots.block.authority.AuthorityRule;
 import com.alibaba.csp.sentinel.util.AssertUtil;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
@@ -26,7 +25,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public class AuthorityRuleEntity extends AbstractRuleEntity<AuthorityRule> {
 
-    public AuthorityRuleEntity() {}
+    public AuthorityRuleEntity() {
+    }
 
     public AuthorityRuleEntity(AuthorityRule authorityRule) {
         AssertUtil.notNull(authorityRule, "Authority rule should not be null");

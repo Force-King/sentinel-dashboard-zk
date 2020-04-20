@@ -39,8 +39,6 @@ public class ClusterClientStateVO {
 
     @Override
     public String toString() {
-        return "ClusterClientStateVO{" +
-            "clientConfig=" + clientConfig +
-            '}';
+        return "ClusterClientStateVO{" + "clientConfig=" + clientConfig + '}';
     }
 }

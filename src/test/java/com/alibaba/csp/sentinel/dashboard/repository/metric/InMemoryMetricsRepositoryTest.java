@@ -15,20 +15,27 @@
  */
 package com.alibaba.csp.sentinel.dashboard.repository.metric;
 
-import com.alibaba.csp.sentinel.dashboard.datasource.entity.MetricEntity;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
 
+import com.alibaba.csp.sentinel.dashboard.datasource.entity.MetricEntity;
+import java.util.ConcurrentModificationException;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.assertj.core.util.Lists;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.util.CollectionUtils;
-
-import java.util.ConcurrentModificationException;
-import java.util.Date;
-import java.util.List;
-import java.util.concurrent.*;
-
-import static org.junit.Assert.*;
 
 /**
  * Test cases for {@link InMemoryMetricsRepository}.
@@ -94,8 +101,8 @@ public class InMemoryMetricsRepositoryTest {
         entry.setSuccessQps(1L);
         inMemoryMetricsRepository.save(entry);
 
-        List<MetricEntity> list = inMemoryMetricsRepository.queryByAppAndResourceBetween(
-            DEFAULT_EXPIRE_APP, DEFAULT_RESOURCE, now - 2 * EXPIRE_TIME, now + EXPIRE_TIME);
+        List<MetricEntity> list = inMemoryMetricsRepository.queryByAppAndResourceBetween(DEFAULT_EXPIRE_APP,
+                DEFAULT_RESOURCE, now - 2 * EXPIRE_TIME, now + EXPIRE_TIME);
 
         assertFalse(CollectionUtils.isEmpty(list));
         assertEquals(1, list.size());
@@ -105,23 +112,21 @@ public class InMemoryMetricsRepositoryTest {
     public void testListResourcesOfApp() {
         // prepare basic test data
         testSave();
-        System.out.println( "[" + System.currentTimeMillis() + "] Basic test data ready in testListResourcesOfApp");
+        System.out.println("[" + System.currentTimeMillis() + "] Basic test data ready in testListResourcesOfApp");
 
         List<CompletableFuture> futures = Lists.newArrayList();
 
         // concurrent query resources of app
         final CyclicBarrier cyclicBarrier = new CyclicBarrier(8);
         for (int j = 0; j < 10000; j++) {
-            futures.add(
-                CompletableFuture.runAsync(() -> {
-                        try {
-                            cyclicBarrier.await();
-                            inMemoryMetricsRepository.listResourcesOfApp(DEFAULT_APP);
-                        } catch (InterruptedException | BrokenBarrierException e) {
-                            e.printStackTrace();
-                        }
-                }, executorService)
-            );
+            futures.add(CompletableFuture.runAsync(() -> {
+                try {
+                    cyclicBarrier.await();
+                    inMemoryMetricsRepository.listResourcesOfApp(DEFAULT_APP);
+                } catch (InterruptedException | BrokenBarrierException e) {
+                    e.printStackTrace();
+                }
+            }, executorService));
         }
 
         // batch add metric entity
@@ -144,7 +149,8 @@ public class InMemoryMetricsRepositoryTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
-            e.getCause().printStackTrace();
+            e.getCause()
+                    .printStackTrace();
             if (e.getCause() instanceof ConcurrentModificationException) {
                 fail("concurrent error occurred");
             } else {

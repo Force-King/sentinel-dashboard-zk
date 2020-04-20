@@ -15,19 +15,15 @@
  */
 package com.alibaba.csp.sentinel.dashboard.repository.metric;
 
+import com.alibaba.csp.sentinel.dashboard.datasource.entity.MetricEntity;
+import com.alibaba.csp.sentinel.util.StringUtil;
+import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-
-import com.alibaba.csp.sentinel.dashboard.datasource.entity.MetricEntity;
-import com.alibaba.csp.sentinel.util.StringUtil;
-
-import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import org.springframework.stereotype.Component;
 
 /**
@@ -47,20 +43,24 @@ public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity
     private Map<String, Map<String, ConcurrentLinkedHashMap<Long, MetricEntity>>> allMetrics = new ConcurrentHashMap<>();
 
 
-
     @Override
     public synchronized void save(MetricEntity entity) {
         if (entity == null || StringUtil.isBlank(entity.getApp())) {
             return;
         }
         allMetrics.computeIfAbsent(entity.getApp(), e -> new ConcurrentHashMap<>(16))
-            .computeIfAbsent(entity.getResource(), e -> new ConcurrentLinkedHashMap.Builder<Long, MetricEntity>()
-                .maximumWeightedCapacity(MAX_METRIC_LIVE_TIME_MS).weigher((key, value) -> {
-                    // Metric older than {@link #MAX_METRIC_LIVE_TIME_MS} will be removed.
-                    int weight = (int)(System.currentTimeMillis() - key);
-                    // weight must be a number greater than or equal to one
-                    return Math.max(weight, 1);
-                }).build()).put(entity.getTimestamp().getTime(), entity);
+                .computeIfAbsent(entity.getResource(),
+                        e -> new ConcurrentLinkedHashMap.Builder<Long, MetricEntity>().maximumWeightedCapacity(
+                                MAX_METRIC_LIVE_TIME_MS)
+                                .weigher((key, value) -> {
+                                    // Metric older than {@link #MAX_METRIC_LIVE_TIME_MS} will be removed.
+                                    int weight = (int) (System.currentTimeMillis() - key);
+                                    // weight must be a number greater than or equal to one
+                                    return Math.max(weight, 1);
+                                })
+                                .build())
+                .put(entity.getTimestamp()
+                        .getTime(), entity);
     }
 
     @Override
@@ -72,8 +72,8 @@ public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity
     }
 
     @Override
-    public synchronized List<MetricEntity> queryByAppAndResourceBetween(String app, String resource,
-                                                                        long startTime, long endTime) {
+    public synchronized List<MetricEntity> queryByAppAndResourceBetween(String app, String resource, long startTime,
+            long endTime) {
         List<MetricEntity> results = new ArrayList<>();
         if (StringUtil.isBlank(app)) {
             return results;
@@ -109,7 +109,8 @@ public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity
         Map<String, MetricEntity> resourceCount = new ConcurrentHashMap<>(32);
 
         for (Entry<String, ConcurrentLinkedHashMap<Long, MetricEntity>> resourceMetrics : resourceMap.entrySet()) {
-            for (Entry<Long, MetricEntity> metrics : resourceMetrics.getValue().entrySet()) {
+            for (Entry<Long, MetricEntity> metrics : resourceMetrics.getValue()
+                    .entrySet()) {
                 if (metrics.getKey() < minTimeMs) {
                     continue;
                 }
@@ -128,17 +129,19 @@ public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity
         }
         // Order by last minute b_qps DESC.
         return resourceCount.entrySet()
-            .stream()
-            .sorted((o1, o2) -> {
-                MetricEntity e1 = o1.getValue();
-                MetricEntity e2 = o2.getValue();
-                int t = e2.getBlockQps().compareTo(e1.getBlockQps());
-                if (t != 0) {
-                    return t;
-                }
-                return e2.getPassQps().compareTo(e1.getPassQps());
-            })
-            .map(Entry::getKey)
-            .collect(Collectors.toList());
+                .stream()
+                .sorted((o1, o2) -> {
+                    MetricEntity e1 = o1.getValue();
+                    MetricEntity e2 = o2.getValue();
+                    int t = e2.getBlockQps()
+                            .compareTo(e1.getBlockQps());
+                    if (t != 0) {
+                        return t;
+                    }
+                    return e2.getPassQps()
+                            .compareTo(e1.getPassQps());
+                })
+                .map(Entry::getKey)
+                .collect(Collectors.toList());
     }
 }

@@ -47,18 +47,14 @@ public class ClusterUniversalStateVO {
         return stateInfo;
     }
 
-    public ClusterUniversalStateVO setStateInfo(
-        ClusterStateSimpleEntity stateInfo) {
+    public ClusterUniversalStateVO setStateInfo(ClusterStateSimpleEntity stateInfo) {
         this.stateInfo = stateInfo;
         return this;
     }
 
     @Override
     public String toString() {
-        return "ClusterUniversalStateVO{" +
-            "stateInfo=" + stateInfo +
-            ", client=" + client +
-            ", server=" + server +
-            '}';
+        return "ClusterUniversalStateVO{" + "stateInfo=" + stateInfo + ", client=" + client + ", server=" + server
+                + '}';
     }
 }
