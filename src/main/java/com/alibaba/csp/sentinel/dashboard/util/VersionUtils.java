@@ -81,8 +81,8 @@ public final class VersionUtils {
                 return Optional.empty();
             } else {
                 return Optional.of(version.setMajorVersion(ver[0])
-                        .setMinorVersion(ver[1])
-                        .setFixVersion(ver[2]));
+                                          .setMinorVersion(ver[1])
+                                          .setFixVersion(ver[2]));
             }
         } catch (Exception ex) {
             // Parse fail, return empty.

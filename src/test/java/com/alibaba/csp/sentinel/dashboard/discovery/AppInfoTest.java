@@ -73,7 +73,7 @@ public class AppInfoTest {
         AppInfo appInfo = new AppInfo("default");
         assertEquals("default", appInfo.getApp());
         assertEquals(0, appInfo.getMachines()
-                .size());
+                               .size());
         //add one
         {
             MachineInfo machineInfo = new MachineInfo();
@@ -87,7 +87,7 @@ public class AppInfoTest {
             appInfo.addMachine(machineInfo);
         }
         assertEquals(1, appInfo.getMachines()
-                .size());
+                               .size());
         //add duplicated one
         {
             MachineInfo machineInfo = new MachineInfo();
@@ -101,7 +101,7 @@ public class AppInfoTest {
             appInfo.addMachine(machineInfo);
         }
         assertEquals(1, appInfo.getMachines()
-                .size());
+                               .size());
         //add different one
         {
             MachineInfo machineInfo = new MachineInfo();
@@ -115,13 +115,13 @@ public class AppInfoTest {
             appInfo.addMachine(machineInfo);
         }
         assertEquals(2, appInfo.getMachines()
-                .size());
+                               .size());
         appInfo.removeMachine("127.0.0.1", 3389);
         assertEquals(1, appInfo.getMachines()
-                .size());
+                               .size());
         appInfo.removeMachine("127.0.0.1", 3390);
         assertEquals(0, appInfo.getMachines()
-                .size());
+                               .size());
     }
 
     @Test

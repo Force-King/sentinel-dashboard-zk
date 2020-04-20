@@ -59,7 +59,8 @@ public class ClusterConfigService {
         String ip = request.getIp();
         int port = request.getPort();
         return sentinelApiClient.modifyClusterClientConfig(app, ip, port, request.getClientConfig())
-                .thenCompose(v -> sentinelApiClient.modifyClusterMode(ip, port, ClusterStateManager.CLUSTER_CLIENT));
+                                .thenCompose(v -> sentinelApiClient.modifyClusterMode(ip, port,
+                                        ClusterStateManager.CLUSTER_CLIENT));
     }
 
     private boolean notClientRequestValid(/*@NonNull */ ClusterClientModifyRequest request) {
@@ -85,9 +86,12 @@ public class ClusterConfigService {
         String ip = request.getIp();
         int port = request.getPort();
         return sentinelApiClient.modifyClusterServerNamespaceSet(app, ip, port, namespaceSet)
-                .thenCompose(v -> sentinelApiClient.modifyClusterServerTransportConfig(app, ip, port, transportConfig))
-                .thenCompose(v -> sentinelApiClient.modifyClusterServerFlowConfig(app, ip, port, flowConfig))
-                .thenCompose(v -> sentinelApiClient.modifyClusterMode(ip, port, ClusterStateManager.CLUSTER_SERVER));
+                                .thenCompose(v -> sentinelApiClient.modifyClusterServerTransportConfig(app, ip, port,
+                                        transportConfig))
+                                .thenCompose(
+                                        v -> sentinelApiClient.modifyClusterServerFlowConfig(app, ip, port, flowConfig))
+                                .thenCompose(v -> sentinelApiClient.modifyClusterMode(ip, port,
+                                        ClusterStateManager.CLUSTER_SERVER));
     }
 
     /**
@@ -107,11 +111,15 @@ public class ClusterConfigService {
         }
 
         List<CompletableFuture<ClusterUniversalStatePairVO>> futures = appInfo.getMachines()
-                .stream()
-                .filter(e -> e.isHealthy())
-                .map(machine -> getClusterUniversalState(app, machine.getIp(), machine.getPort()).thenApply(
-                        e -> new ClusterUniversalStatePairVO(machine.getIp(), machine.getPort(), e)))
-                .collect(Collectors.toList());
+                                                                              .stream()
+                                                                              .filter(e -> e.isHealthy())
+                                                                              .map(machine -> getClusterUniversalState(
+                                                                                      app, machine.getIp(),
+                                                                                      machine.getPort()).thenApply(
+                                                                                      e -> new ClusterUniversalStatePairVO(
+                                                                                              machine.getIp(),
+                                                                                              machine.getPort(), e)))
+                                                                              .collect(Collectors.toList());
 
         return AsyncUtils.sequenceSuccessFuture(futures);
     }
@@ -126,44 +134,48 @@ public class ClusterConfigService {
         }
 
         boolean machineOk = appInfo.getMachines()
-                .stream()
-                .filter(e -> e.isHealthy())
-                .map(e -> e.getIp() + '@' + e.getPort())
-                .anyMatch(e -> e.equals(machineId));
+                                   .stream()
+                                   .filter(e -> e.isHealthy())
+                                   .map(e -> e.getIp() + '@' + e.getPort())
+                                   .anyMatch(e -> e.equals(machineId));
         if (!machineOk) {
             return AsyncUtils.newFailedFuture(new IllegalStateException("machine does not exist or disconnected"));
         }
 
         return getClusterUniversalState(app).thenApply(ClusterEntityUtils::wrapToClusterGroup)
-                .thenCompose(e -> e.stream()
-                        .filter(e1 -> e1.getMachineId()
-                                .equals(machineId))
-                        .findAny()
-                        .map(CompletableFuture::completedFuture)
-                        .orElse(AsyncUtils.newFailedFuture(new IllegalStateException("not a server: " + machineId))));
+                                            .thenCompose(e -> e.stream()
+                                                               .filter(e1 -> e1.getMachineId()
+                                                                               .equals(machineId))
+                                                               .findAny()
+                                                               .map(CompletableFuture::completedFuture)
+                                                               .orElse(AsyncUtils.newFailedFuture(
+                                                                       new IllegalStateException(
+                                                                               "not a server: " + machineId))));
     }
 
     public CompletableFuture<ClusterUniversalStateVO> getClusterUniversalState(String app, String ip, int port) {
         return sentinelApiClient.fetchClusterMode(ip, port)
-                .thenApply(e -> new ClusterUniversalStateVO().setStateInfo(e))
-                .thenCompose(vo -> {
-                    if (vo.getStateInfo()
-                            .getClientAvailable()) {
-                        return sentinelApiClient.fetchClusterClientInfoAndConfig(ip, port)
-                                .thenApply(cc -> vo.setClient(new ClusterClientStateVO().setClientConfig(cc)));
-                    } else {
-                        return CompletableFuture.completedFuture(vo);
-                    }
-                })
-                .thenCompose(vo -> {
-                    if (vo.getStateInfo()
-                            .getServerAvailable()) {
-                        return sentinelApiClient.fetchClusterServerBasicInfo(ip, port)
-                                .thenApply(vo::setServer);
-                    } else {
-                        return CompletableFuture.completedFuture(vo);
-                    }
-                });
+                                .thenApply(e -> new ClusterUniversalStateVO().setStateInfo(e))
+                                .thenCompose(vo -> {
+                                    if (vo.getStateInfo()
+                                          .getClientAvailable()) {
+                                        return sentinelApiClient.fetchClusterClientInfoAndConfig(ip, port)
+                                                                .thenApply(cc -> vo.setClient(
+                                                                        new ClusterClientStateVO().setClientConfig(
+                                                                                cc)));
+                                    } else {
+                                        return CompletableFuture.completedFuture(vo);
+                                    }
+                                })
+                                .thenCompose(vo -> {
+                                    if (vo.getStateInfo()
+                                          .getServerAvailable()) {
+                                        return sentinelApiClient.fetchClusterServerBasicInfo(ip, port)
+                                                                .thenApply(vo::setServer);
+                                    } else {
+                                        return CompletableFuture.completedFuture(vo);
+                                    }
+                                });
     }
 
     private boolean invalidTransportConfig(ServerTransportConfig transportConfig) {

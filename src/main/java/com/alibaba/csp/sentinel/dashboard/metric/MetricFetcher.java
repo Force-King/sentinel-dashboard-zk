@@ -94,7 +94,7 @@ public class MetricFetcher {
 
     public MetricFetcher() {
         int cores = Runtime.getRuntime()
-                .availableProcessors() * 2;
+                           .availableProcessors() * 2;
         long keepAliveTime = 0;
         int queueSize = 2048;
         RejectedExecutionHandler handler = new DiscardPolicy();
@@ -105,23 +105,23 @@ public class MetricFetcher {
                 new ArrayBlockingQueue<>(queueSize), new NamedThreadFactory("sentinel-dashboard-metrics-fetchWorker"),
                 handler);
         IOReactorConfig ioConfig = IOReactorConfig.custom()
-                .setConnectTimeout(3000)
-                .setSoTimeout(3000)
-                .setIoThreadCount(Runtime.getRuntime()
-                        .availableProcessors() * 2)
-                .build();
+                                                  .setConnectTimeout(3000)
+                                                  .setSoTimeout(3000)
+                                                  .setIoThreadCount(Runtime.getRuntime()
+                                                                           .availableProcessors() * 2)
+                                                  .build();
 
         httpclient = HttpAsyncClients.custom()
-                .setRedirectStrategy(new DefaultRedirectStrategy() {
-                    @Override
-                    protected boolean isRedirectable(final String method) {
-                        return false;
-                    }
-                })
-                .setMaxConnTotal(4000)
-                .setMaxConnPerRoute(1000)
-                .setDefaultIOReactorConfig(ioConfig)
-                .build();
+                                     .setRedirectStrategy(new DefaultRedirectStrategy() {
+                                         @Override
+                                         protected boolean isRedirectable(final String method) {
+                                             return false;
+                                         }
+                                     })
+                                     .setMaxConnTotal(4000)
+                                     .setMaxConnPerRoute(1000)
+                                     .setDefaultIOReactorConfig(ioConfig)
+                                     .build();
         httpclient.start();
         start();
     }
@@ -202,7 +202,7 @@ public class MetricFetcher {
             if (machine.isDead()) {
                 latch.countDown();
                 appManagement.getDetailApp(app)
-                        .removeMachine(machine.getIp(), machine.getPort());
+                             .removeMachine(machine.getIp(), machine.getPort());
                 logger.info("Dead machine removed: {}:{} of {}", machine.getIp(), machine.getPort(), app);
                 continue;
             }
@@ -269,7 +269,7 @@ public class MetricFetcher {
         long lastFetchMs = now - MAX_LAST_FETCH_INTERVAL_MS;
         if (appLastFetchTime.containsKey(app)) {
             lastFetchMs = Math.max(lastFetchMs, appLastFetchTime.get(app)
-                    .get() + 1000);
+                                                                .get() + 1000);
         }
         // trim milliseconds
         lastFetchMs = lastFetchMs / 1000 * 1000;
@@ -280,7 +280,7 @@ public class MetricFetcher {
         }
         // update last_fetch in advance.
         appLastFetchTime.computeIfAbsent(app, a -> new AtomicLong())
-                .set(endTime);
+                        .set(endTime);
         final long finalLastFetchMs = lastFetchMs;
         final long finalEndTime = endTime;
         try {
@@ -300,14 +300,14 @@ public class MetricFetcher {
     private void handleResponse(final HttpResponse response, MachineInfo machine, Map<String, MetricEntity> metricMap)
             throws Exception {
         int code = response.getStatusLine()
-                .getStatusCode();
+                           .getStatusCode();
         if (code != HTTP_OK) {
             return;
         }
         Charset charset = null;
         try {
             String contentTypeStr = response.getFirstHeader("Content-type")
-                    .getValue();
+                                            .getValue();
             if (StringUtil.isNotEmpty(contentTypeStr)) {
                 ContentType contentType = ContentType.parse(contentTypeStr);
                 charset = contentType.getCharset();

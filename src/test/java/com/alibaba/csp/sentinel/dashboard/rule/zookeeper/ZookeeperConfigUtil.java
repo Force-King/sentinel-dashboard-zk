@@ -35,7 +35,7 @@ public class ZookeeperConfigUtil {
             stringBuilder.append(appName);
         } else {
             stringBuilder.append("/")
-                    .append(appName);
+                         .append(appName);
         }
         return stringBuilder.toString();
     }

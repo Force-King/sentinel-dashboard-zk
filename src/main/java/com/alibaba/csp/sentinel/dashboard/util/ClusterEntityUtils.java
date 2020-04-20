@@ -50,51 +50,53 @@ public final class ClusterEntityUtils {
         // Handle token servers that belong to current app.
         for (ClusterUniversalStatePairVO stateVO : list) {
             int mode = stateVO.getState()
-                    .getStateInfo()
-                    .getMode();
+                              .getStateInfo()
+                              .getMode();
 
             if (mode == ClusterStateManager.CLUSTER_SERVER) {
                 String ip = stateVO.getIp();
                 String serverId = ip + '@' + stateVO.getCommandPort();
                 ClusterServerStateVO serverStateVO = stateVO.getState()
-                        .getServer();
+                                                            .getServer();
                 map.computeIfAbsent(serverId, v -> new AppClusterServerStateWrapVO().setId(serverId)
-                        .setIp(ip)
-                        .setPort(serverStateVO.getPort())
-                        .setState(serverStateVO)
-                        .setBelongToApp(true)
-                        .setConnectedCount(serverStateVO.getConnection()
-                                .stream()
-                                .mapToInt(ConnectionGroupVO::getConnectedCount)
-                                .sum()));
+                                                                                    .setIp(ip)
+                                                                                    .setPort(serverStateVO.getPort())
+                                                                                    .setState(serverStateVO)
+                                                                                    .setBelongToApp(true)
+                                                                                    .setConnectedCount(
+                                                                                            serverStateVO.getConnection()
+                                                                                                         .stream()
+                                                                                                         .mapToInt(
+                                                                                                                 ConnectionGroupVO::getConnectedCount)
+                                                                                                         .sum()));
                 tokenServerSet.add(ip + ":" + serverStateVO.getPort());
             }
         }
         // Handle token servers from other app.
         for (ClusterUniversalStatePairVO stateVO : list) {
             int mode = stateVO.getState()
-                    .getStateInfo()
-                    .getMode();
+                              .getStateInfo()
+                              .getMode();
 
             if (mode == ClusterStateManager.CLUSTER_CLIENT) {
                 ClusterClientStateVO clientState = stateVO.getState()
-                        .getClient();
+                                                          .getClient();
                 if (clientState == null) {
                     continue;
                 }
                 String serverIp = clientState.getClientConfig()
-                        .getServerHost();
+                                             .getServerHost();
                 int serverPort = clientState.getClientConfig()
-                        .getServerPort();
+                                            .getServerPort();
                 if (tokenServerSet.contains(serverIp + ":" + serverPort)) {
                     continue;
                 }
                 // We are not able to get the commandPort of foreign token server directly.
                 String serverId = String.format("%s:%d", serverIp, serverPort);
                 map.computeIfAbsent(serverId, v -> new AppClusterServerStateWrapVO().setId(serverId)
-                        .setIp(serverIp)
-                        .setPort(serverPort)
-                        .setBelongToApp(false));
+                                                                                    .setIp(serverIp)
+                                                                                    .setPort(serverPort)
+                                                                                    .setBelongToApp(false));
             }
         }
         return new ArrayList<>(map.values());
@@ -108,18 +110,19 @@ public final class ClusterEntityUtils {
         Map<String, AppClusterClientStateWrapVO> map = new HashMap<>();
         for (ClusterUniversalStatePairVO stateVO : list) {
             int mode = stateVO.getState()
-                    .getStateInfo()
-                    .getMode();
+                              .getStateInfo()
+                              .getMode();
 
             if (mode == ClusterStateManager.CLUSTER_CLIENT) {
                 String ip = stateVO.getIp();
                 String clientId = ip + '@' + stateVO.getCommandPort();
                 ClusterClientStateVO clientStateVO = stateVO.getState()
-                        .getClient();
+                                                            .getClient();
                 map.computeIfAbsent(clientId, v -> new AppClusterClientStateWrapVO().setId(clientId)
-                        .setIp(ip)
-                        .setState(clientStateVO)
-                        .setCommandPort(stateVO.getCommandPort()));
+                                                                                    .setIp(ip)
+                                                                                    .setState(clientStateVO)
+                                                                                    .setCommandPort(
+                                                                                            stateVO.getCommandPort()));
             }
         }
         return new ArrayList<>(map.values());
@@ -132,45 +135,46 @@ public final class ClusterEntityUtils {
         Map<String, ClusterGroupEntity> map = new HashMap<>();
         for (ClusterUniversalStatePairVO stateVO : list) {
             int mode = stateVO.getState()
-                    .getStateInfo()
-                    .getMode();
+                              .getStateInfo()
+                              .getMode();
             String ip = stateVO.getIp();
             if (mode == ClusterStateManager.CLUSTER_SERVER) {
                 String serverAddress = getIp(ip);
                 int port = stateVO.getState()
-                        .getServer()
-                        .getPort();
+                                  .getServer()
+                                  .getPort();
                 map.computeIfAbsent(serverAddress, v -> new ClusterGroupEntity().setBelongToApp(true)
-                        .setMachineId(ip + '@' + stateVO.getCommandPort())
-                        .setIp(ip)
-                        .setPort(port));
+                                                                                .setMachineId(ip + '@'
+                                                                                        + stateVO.getCommandPort())
+                                                                                .setIp(ip)
+                                                                                .setPort(port));
             }
         }
         for (ClusterUniversalStatePairVO stateVO : list) {
             int mode = stateVO.getState()
-                    .getStateInfo()
-                    .getMode();
+                              .getStateInfo()
+                              .getMode();
             String ip = stateVO.getIp();
             if (mode == ClusterStateManager.CLUSTER_CLIENT) {
                 String targetServer = stateVO.getState()
-                        .getClient()
-                        .getClientConfig()
-                        .getServerHost();
+                                             .getClient()
+                                             .getClientConfig()
+                                             .getServerHost();
                 Integer targetPort = stateVO.getState()
-                        .getClient()
-                        .getClientConfig()
-                        .getServerPort();
+                                            .getClient()
+                                            .getClientConfig()
+                                            .getServerPort();
                 if (StringUtil.isBlank(targetServer) || targetPort == null || targetPort <= 0) {
                     continue;
                 }
 
                 ClusterGroupEntity group = map.computeIfAbsent(targetServer,
                         v -> new ClusterGroupEntity().setBelongToApp(true)
-                                .setMachineId(targetServer)
-                                .setIp(targetServer)
-                                .setPort(targetPort));
+                                                     .setMachineId(targetServer)
+                                                     .setIp(targetServer)
+                                                     .setPort(targetPort));
                 group.getClientSet()
-                        .add(ip + '@' + stateVO.getCommandPort());
+                     .add(ip + '@' + stateVO.getCommandPort());
             }
         }
         return new ArrayList<>(map.values());

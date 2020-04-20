@@ -64,7 +64,7 @@ public class MetricVo implements Comparable<MetricVo> {
         if (entities != null) {
             for (MetricEntity entity : entities) {
                 if (entity.getResource()
-                        .equals(identity)) {
+                          .equals(identity)) {
                     list.add(fromMetricEntity(entity));
                 }
             }
@@ -77,9 +77,9 @@ public class MetricVo implements Comparable<MetricVo> {
         vo.id = entity.getId();
         vo.app = entity.getApp();
         vo.timestamp = entity.getTimestamp()
-                .getTime();
+                             .getTime();
         vo.gmtCreate = entity.getGmtCreate()
-                .getTime();
+                             .getTime();
         vo.resource = entity.getResource();
         vo.passQps = entity.getPassQps();
         vo.blockQps = entity.getBlockQps();

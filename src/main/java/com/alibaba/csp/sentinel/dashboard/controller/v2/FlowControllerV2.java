@@ -84,9 +84,9 @@ public class FlowControllerV2 {
                 for (FlowRuleEntity entity : rules) {
                     entity.setApp(app);
                     if (entity.getClusterConfig() != null && entity.getClusterConfig()
-                            .getFlowId() != null) {
+                                                                   .getFlowId() != null) {
                         entity.setId(entity.getClusterConfig()
-                                .getFlowId());
+                                           .getFlowId());
                     }
                 }
             }
@@ -156,9 +156,9 @@ public class FlowControllerV2 {
         entity.setGmtCreate(date);
         entity.setGmtModified(date);
         entity.setLimitApp(entity.getLimitApp()
-                .trim());
+                                 .trim());
         entity.setResource(entity.getResource()
-                .trim());
+                                 .trim());
         try {
             /*if (!adminUsername.equals(authUser.getLoginName())) {
                 return Result.ofFail(-2, "您不是管理员，没有该权限！");

@@ -43,9 +43,9 @@ public class ApolloConfig {
     @Bean
     public ApolloOpenApiClient apolloOpenApiClient() {
         ApolloOpenApiClient client = ApolloOpenApiClient.newBuilder()
-                .withPortalUrl("http://localhost:10034")
-                .withToken("token")
-                .build();
+                                                        .withPortalUrl("http://localhost:10034")
+                                                        .withToken("token")
+                                                        .build();
         return client;
 
     }

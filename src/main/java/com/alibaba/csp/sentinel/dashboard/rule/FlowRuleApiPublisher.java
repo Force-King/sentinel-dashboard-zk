@@ -46,7 +46,7 @@ public class FlowRuleApiPublisher implements DynamicRulePublisher<List<FlowRuleE
             return;
         }
         Set<MachineInfo> set = appManagement.getDetailApp(app)
-                .getMachines();
+                                            .getMachines();
 
         for (MachineInfo machine : set) {
             if (!machine.isHealthy()) {

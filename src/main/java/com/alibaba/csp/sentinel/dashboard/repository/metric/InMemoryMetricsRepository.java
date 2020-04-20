@@ -49,18 +49,20 @@ public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity
             return;
         }
         allMetrics.computeIfAbsent(entity.getApp(), e -> new ConcurrentHashMap<>(16))
-                .computeIfAbsent(entity.getResource(),
-                        e -> new ConcurrentLinkedHashMap.Builder<Long, MetricEntity>().maximumWeightedCapacity(
-                                MAX_METRIC_LIVE_TIME_MS)
-                                .weigher((key, value) -> {
-                                    // Metric older than {@link #MAX_METRIC_LIVE_TIME_MS} will be removed.
-                                    int weight = (int) (System.currentTimeMillis() - key);
-                                    // weight must be a number greater than or equal to one
-                                    return Math.max(weight, 1);
-                                })
-                                .build())
-                .put(entity.getTimestamp()
-                        .getTime(), entity);
+                  .computeIfAbsent(entity.getResource(),
+                          e -> new ConcurrentLinkedHashMap.Builder<Long, MetricEntity>().maximumWeightedCapacity(
+                                  MAX_METRIC_LIVE_TIME_MS)
+                                                                                        .weigher((key, value) -> {
+                                                                                            // Metric older than {@link #MAX_METRIC_LIVE_TIME_MS} will be removed.
+                                                                                            int weight = (int) (
+                                                                                                    System.currentTimeMillis()
+                                                                                                            - key);
+                                                                                            // weight must be a number greater than or equal to one
+                                                                                            return Math.max(weight, 1);
+                                                                                        })
+                                                                                        .build())
+                  .put(entity.getTimestamp()
+                             .getTime(), entity);
     }
 
     @Override
@@ -110,7 +112,7 @@ public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity
 
         for (Entry<String, ConcurrentLinkedHashMap<Long, MetricEntity>> resourceMetrics : resourceMap.entrySet()) {
             for (Entry<Long, MetricEntity> metrics : resourceMetrics.getValue()
-                    .entrySet()) {
+                                                                    .entrySet()) {
                 if (metrics.getKey() < minTimeMs) {
                     continue;
                 }
@@ -129,19 +131,19 @@ public class InMemoryMetricsRepository implements MetricsRepository<MetricEntity
         }
         // Order by last minute b_qps DESC.
         return resourceCount.entrySet()
-                .stream()
-                .sorted((o1, o2) -> {
-                    MetricEntity e1 = o1.getValue();
-                    MetricEntity e2 = o2.getValue();
-                    int t = e2.getBlockQps()
-                            .compareTo(e1.getBlockQps());
-                    if (t != 0) {
-                        return t;
-                    }
-                    return e2.getPassQps()
-                            .compareTo(e1.getPassQps());
-                })
-                .map(Entry::getKey)
-                .collect(Collectors.toList());
+                            .stream()
+                            .sorted((o1, o2) -> {
+                                MetricEntity e1 = o1.getValue();
+                                MetricEntity e2 = o2.getValue();
+                                int t = e2.getBlockQps()
+                                          .compareTo(e1.getBlockQps());
+                                if (t != 0) {
+                                    return t;
+                                }
+                                return e2.getPassQps()
+                                         .compareTo(e1.getPassQps());
+                            })
+                            .map(Entry::getKey)
+                            .collect(Collectors.toList());
     }
 }

@@ -49,7 +49,7 @@ public class FlowRuleZookeeperPublisher implements DynamicRulePublisher<List<Flo
 
         String path = zkConfig.getFlowRulePath(app);
         Stat stat = zkClient.checkExists()
-                .forPath(path);
+                            .forPath(path);
         if (stat == null) {
             zkClient.create()
                     .creatingParentContainersIfNeeded()
@@ -57,7 +57,7 @@ public class FlowRuleZookeeperPublisher implements DynamicRulePublisher<List<Flo
                     .forPath(path, null);
         }
         byte[] data = CollectionUtils.isEmpty(rules) ? "[]".getBytes() : converter.convert(rules)
-                .getBytes();
+                                                                                  .getBytes();
         zkClient.setData()
                 .forPath(path, data);
     }

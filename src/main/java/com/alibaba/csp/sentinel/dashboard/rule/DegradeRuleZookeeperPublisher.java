@@ -50,7 +50,7 @@ public class DegradeRuleZookeeperPublisher implements DynamicRulePublisher<List<
 
         String path = zkConfig.getDegradeRulePath(app);
         Stat stat = zkClient.checkExists()
-                .forPath(path);
+                            .forPath(path);
         if (stat == null) {
             zkClient.create()
                     .creatingParentContainersIfNeeded()
@@ -58,7 +58,7 @@ public class DegradeRuleZookeeperPublisher implements DynamicRulePublisher<List<
                     .forPath(path, null);
         }
         byte[] data = CollectionUtils.isEmpty(rules) ? "[]".getBytes() : converter.convert(rules)
-                .getBytes();
+                                                                                  .getBytes();
         zkClient.setData()
                 .forPath(path, data);
     }

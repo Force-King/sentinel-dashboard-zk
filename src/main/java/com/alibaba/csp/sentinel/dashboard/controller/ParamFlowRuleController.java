@@ -73,10 +73,10 @@ public class ParamFlowRuleController {
     private boolean checkIfSupported(String app, String ip, int port) {
         try {
             return Optional.ofNullable(appManagement.getDetailApp(app))
-                    .flatMap(e -> e.getMachine(ip, port))
-                    .flatMap(m -> VersionUtils.parseVersion(m.getVersion())
-                            .map(v -> v.greaterOrEqual(version020)))
-                    .orElse(true);
+                           .flatMap(e -> e.getMachine(ip, port))
+                           .flatMap(m -> VersionUtils.parseVersion(m.getVersion())
+                                                     .map(v -> v.greaterOrEqual(version020)))
+                           .orElse(true);
             // If error occurred or cannot retrieve machine info, return true.
         } catch (Exception ex) {
             return true;
@@ -102,9 +102,9 @@ public class ParamFlowRuleController {
         }
         try {
             return sentinelApiClient.fetchParamFlowRulesOfMachine(app, ip, port)
-                    .thenApply(repository::saveAll)
-                    .thenApply(Result::ofSuccess)
-                    .get();
+                                    .thenApply(repository::saveAll)
+                                    .thenApply(Result::ofSuccess)
+                                    .get();
         } catch (ExecutionException ex) {
             logger.error("Error when querying parameter flow rules", ex.getCause());
             if (isNotSupported(ex.getCause())) {
@@ -139,8 +139,8 @@ public class ParamFlowRuleController {
         }
         entity.setId(null);
         entity.getRule()
-                .setResource(entity.getResource()
-                        .trim());
+              .setResource(entity.getResource()
+                                 .trim());
         Date date = new Date();
         entity.setGmtCreate(date);
         entity.setGmtModified(date);

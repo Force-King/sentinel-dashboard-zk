@@ -96,7 +96,7 @@ public class ResourceTreeNode {
     private boolean search(ResourceTreeNode node, String searchKey) {
         // empty matches all
         if (searchKey == null || searchKey.isEmpty() || node.resource.toLowerCase()
-                .contains(searchKey.toLowerCase())) {
+                                                                     .contains(searchKey.toLowerCase())) {
             node.visible = true;
         } else {
             node.visible = false;

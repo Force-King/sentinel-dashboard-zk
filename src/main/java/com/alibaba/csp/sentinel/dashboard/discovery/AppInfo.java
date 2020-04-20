@@ -68,7 +68,7 @@ public class AppInfo {
         while (it.hasNext()) {
             MachineInfo machine = it.next();
             if (machine.getIp()
-                    .equals(ip) && machine.getPort() == port) {
+                       .equals(ip) && machine.getPort() == port) {
                 it.remove();
                 return true;
             }
@@ -78,10 +78,10 @@ public class AppInfo {
 
     public Optional<MachineInfo> getMachine(String ip, int port) {
         return machines.stream()
-                .filter(e -> e.getIp()
-                        .equals(ip) && e.getPort()
-                        .equals(port))
-                .findFirst();
+                       .filter(e -> e.getIp()
+                                     .equals(ip) && e.getPort()
+                                                     .equals(port))
+                       .findFirst();
     }
 
     private boolean heartbeatJudge(final int threshold) {
@@ -90,14 +90,14 @@ public class AppInfo {
         }
         if (threshold > 0) {
             long healthyCount = machines.stream()
-                    .filter(MachineInfo::isHealthy)
-                    .count();
+                                        .filter(MachineInfo::isHealthy)
+                                        .count();
             if (healthyCount == 0) {
                 // No healthy machines.
                 return machines.stream()
-                        .max(Comparator.comparingLong(MachineInfo::getLastHeartbeat))
-                        .map(e -> System.currentTimeMillis() - e.getLastHeartbeat() < threshold)
-                        .orElse(false);
+                               .max(Comparator.comparingLong(MachineInfo::getLastHeartbeat))
+                               .map(e -> System.currentTimeMillis() - e.getLastHeartbeat() < threshold)
+                               .orElse(false);
             }
         }
         return true;

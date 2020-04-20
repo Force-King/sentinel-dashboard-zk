@@ -145,9 +145,9 @@ public class FlowControllerV1 {
         entity.setGmtCreate(date);
         entity.setGmtModified(date);
         entity.setLimitApp(entity.getLimitApp()
-                .trim());
+                                 .trim());
         entity.setResource(entity.getResource()
-                .trim());
+                                 .trim());
         try {
             entity = repository.save(entity);
         } catch (Throwable throwable) {

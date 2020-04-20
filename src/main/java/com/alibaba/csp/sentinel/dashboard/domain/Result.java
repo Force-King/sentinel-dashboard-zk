@@ -28,13 +28,13 @@ public class Result<R> {
 
     public static <R> Result<R> ofSuccess(R data) {
         return new Result<R>().setSuccess(true)
-                .setMsg("success")
-                .setData(data);
+                              .setMsg("success")
+                              .setData(data);
     }
 
     public static <R> Result<R> ofSuccessMsg(String msg) {
         return new Result<R>().setSuccess(true)
-                .setMsg(msg);
+                              .setMsg(msg);
     }
 
     public static <R> Result<R> ofFail(int code, String msg) {
@@ -50,7 +50,7 @@ public class Result<R> {
         result.setSuccess(false);
         result.setCode(code);
         result.setMsg(throwable.getClass()
-                .getName() + ", " + throwable.getMessage());
+                               .getName() + ", " + throwable.getMessage());
         return result;
     }
 

@@ -81,7 +81,7 @@ public class AuthController {
             }
             AuthService.AuthUser authUser = new SimpleWebAuthServiceImpl.SimpleWebAuthUserImpl(username);
             request.getSession()
-                    .setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY_ADMIN, authUser);
+                   .setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY_ADMIN, authUser);
             return Result.ofSuccess(authUser);
         } else {
             if (StringUtils.isNotBlank(authPassword) && !authPassword.equals(password)) {
@@ -90,7 +90,7 @@ public class AuthController {
             }
             AuthService.AuthUser authUser = new SimpleWebAuthServiceImpl.SimpleWebAuthUserImpl(username);
             request.getSession()
-                    .setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY, authUser);
+                   .setAttribute(SimpleWebAuthServiceImpl.WEB_SESSION_KEY, authUser);
             return Result.ofSuccess(authUser);
         }
 
@@ -99,7 +99,7 @@ public class AuthController {
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public Result<?> logout(HttpServletRequest request) {
         request.getSession()
-                .invalidate();
+               .invalidate();
         return Result.ofSuccess(null);
     }
 }

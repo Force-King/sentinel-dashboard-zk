@@ -113,22 +113,22 @@ public class SentinelApiClient {
 
     public SentinelApiClient() {
         IOReactorConfig ioConfig = IOReactorConfig.custom()
-                .setConnectTimeout(3000)
-                .setSoTimeout(10000)
-                .setIoThreadCount(Runtime.getRuntime()
-                        .availableProcessors() * 2)
-                .build();
+                                                  .setConnectTimeout(3000)
+                                                  .setSoTimeout(10000)
+                                                  .setIoThreadCount(Runtime.getRuntime()
+                                                                           .availableProcessors() * 2)
+                                                  .build();
         httpClient = HttpAsyncClients.custom()
-                .setRedirectStrategy(new DefaultRedirectStrategy() {
-                    @Override
-                    protected boolean isRedirectable(final String method) {
-                        return false;
-                    }
-                })
-                .setMaxConnTotal(4000)
-                .setMaxConnPerRoute(1000)
-                .setDefaultIOReactorConfig(ioConfig)
-                .build();
+                                     .setRedirectStrategy(new DefaultRedirectStrategy() {
+                                         @Override
+                                         protected boolean isRedirectable(final String method) {
+                                             return false;
+                                         }
+                                     })
+                                     .setMaxConnTotal(4000)
+                                     .setMaxConnPerRoute(1000)
+                                     .setDefaultIOReactorConfig(ioConfig)
+                                     .build();
         httpClient.start();
     }
 
@@ -154,8 +154,8 @@ public class SentinelApiClient {
                     queryStringBuilder.append('&');
                 }
                 queryStringBuilder.append(name)
-                        .append('=')
-                        .append(value);
+                                  .append('=')
+                                  .append(value);
             }
         }
         return queryStringBuilder;
@@ -191,7 +191,7 @@ public class SentinelApiClient {
         Charset charset = null;
         try {
             String contentTypeStr = response.getFirstHeader("Content-type")
-                    .getValue();
+                                            .getValue();
             if (StringUtil.isNotEmpty(contentTypeStr)) {
                 ContentType contentType = ContentType.parse(contentTypeStr);
                 charset = contentType.getCharset();
@@ -229,18 +229,20 @@ public class SentinelApiClient {
         StringBuilder urlBuilder = new StringBuilder();
         urlBuilder.append("http://");
         urlBuilder.append(ip)
-                .append(':')
-                .append(port)
-                .append('/')
-                .append(api);
+                  .append(':')
+                  .append(port)
+                  .append('/')
+                  .append(api);
         if (params == null) {
             params = Collections.emptyMap();
         }
         boolean supportPost = StringUtil.isNotEmpty(app) && Optional.ofNullable(appManagement.getDetailApp(app))
-                .flatMap(e -> e.getMachine(ip, port))
-                .flatMap(m -> VersionUtils.parseVersion(m.getVersion())
-                        .map(v -> v.greaterOrEqual(version160)))
-                .orElse(false);
+                                                                    .flatMap(e -> e.getMachine(ip, port))
+                                                                    .flatMap(m -> VersionUtils.parseVersion(
+                                                                            m.getVersion())
+                                                                                              .map(v -> v.greaterOrEqual(
+                                                                                                      version160)))
+                                                                    .orElse(false);
         if (!useHttpPost || !supportPost) {
             // Using GET in older versions, append parameters after url
             if (!params.isEmpty()) {
@@ -264,7 +266,7 @@ public class SentinelApiClient {
             @Override
             public void completed(final HttpResponse response) {
                 int statusCode = response.getStatusLine()
-                        .getStatusCode();
+                                         .getStatusCode();
                 try {
                     String value = getBody(response);
                     if (isSuccess(statusCode)) {
@@ -272,7 +274,7 @@ public class SentinelApiClient {
                     } else {
                         if (isCommandNotFound(statusCode, value)) {
                             future.completeExceptionally(new CommandNotFoundException(request.getURI()
-                                    .getPath()));
+                                                                                             .getPath()));
                         } else {
                             future.completeExceptionally(new CommandFailedException(value));
                         }
@@ -281,7 +283,7 @@ public class SentinelApiClient {
                 } catch (Exception ex) {
                     future.completeExceptionally(ex);
                     logger.error("HTTP request failed: {}", request.getURI()
-                            .toString(), ex);
+                                                                   .toString(), ex);
                 }
             }
 
@@ -289,7 +291,7 @@ public class SentinelApiClient {
             public void failed(final Exception ex) {
                 future.completeExceptionally(ex);
                 logger.error("HTTP request failed: {}", request.getURI()
-                        .toString(), ex);
+                                                               .toString(), ex);
             }
 
             @Override
@@ -350,8 +352,8 @@ public class SentinelApiClient {
             AssertUtil.notEmpty(ip, "Bad machine IP");
             AssertUtil.isTrue(port > 0, "Bad machine port");
             String data = JSON.toJSONString(entities.stream()
-                    .map(r -> r.toRule())
-                    .collect(Collectors.toList()));
+                                                    .map(r -> r.toRule())
+                                                    .collect(Collectors.toList()));
             Map<String, String> params = new HashMap<>(2);
             params.put("type", type);
             params.put("data", data);
@@ -390,8 +392,8 @@ public class SentinelApiClient {
         List<FlowRule> rules = fetchRules(ip, port, FLOW_RULE_TYPE, FlowRule.class);
         if (rules != null) {
             return rules.stream()
-                    .map(rule -> FlowRuleEntity.fromFlowRule(app, ip, port, rule))
-                    .collect(Collectors.toList());
+                        .map(rule -> FlowRuleEntity.fromFlowRule(app, ip, port, rule))
+                        .collect(Collectors.toList());
         } else {
             return null;
         }
@@ -401,8 +403,8 @@ public class SentinelApiClient {
         List<DegradeRule> rules = fetchRules(ip, port, DEGRADE_RULE_TYPE, DegradeRule.class);
         if (rules != null) {
             return rules.stream()
-                    .map(rule -> DegradeRuleEntity.fromDegradeRule(app, ip, port, rule))
-                    .collect(Collectors.toList());
+                        .map(rule -> DegradeRuleEntity.fromDegradeRule(app, ip, port, rule))
+                        .collect(Collectors.toList());
         } else {
             return null;
         }
@@ -412,8 +414,8 @@ public class SentinelApiClient {
         List<SystemRule> rules = fetchRules(ip, port, SYSTEM_RULE_TYPE, SystemRule.class);
         if (rules != null) {
             return rules.stream()
-                    .map(rule -> SystemRuleEntity.fromSystemRule(app, ip, port, rule))
-                    .collect(Collectors.toList());
+                        .map(rule -> SystemRuleEntity.fromSystemRule(app, ip, port, rule))
+                        .collect(Collectors.toList());
         } else {
             return null;
         }
@@ -435,8 +437,8 @@ public class SentinelApiClient {
             AssertUtil.isTrue(port > 0, "Bad machine port");
             return fetchItemsAsync(ip, port, GET_PARAM_RULE_PATH, null, ParamFlowRule.class).thenApply(
                     rules -> rules.stream()
-                            .map(e -> ParamFlowRuleEntity.fromAuthorityRule(app, ip, port, e))
-                            .collect(Collectors.toList()));
+                                  .map(e -> ParamFlowRuleEntity.fromAuthorityRule(app, ip, port, e))
+                                  .collect(Collectors.toList()));
         } catch (Exception e) {
             logger.error("Error when fetching parameter flow rules", e);
             return AsyncUtils.newFailedFuture(e);
@@ -460,10 +462,10 @@ public class SentinelApiClient {
         params.put("type", AUTHORITY_TYPE);
         List<AuthorityRule> rules = fetchRules(ip, port, AUTHORITY_TYPE, AuthorityRule.class);
         return Optional.ofNullable(rules)
-                .map(r -> r.stream()
-                        .map(e -> AuthorityRuleEntity.fromAuthorityRule(app, ip, port, e))
-                        .collect(Collectors.toList()))
-                .orElse(null);
+                       .map(r -> r.stream()
+                                  .map(e -> AuthorityRuleEntity.fromAuthorityRule(app, ip, port, e))
+                                  .collect(Collectors.toList()))
+                       .orElse(null);
     }
 
     /**
@@ -510,8 +512,8 @@ public class SentinelApiClient {
         }
         try {
             String data = JSON.toJSONString(rules.stream()
-                    .map(ParamFlowRuleEntity::getRule)
-                    .collect(Collectors.toList()));
+                                                 .map(ParamFlowRuleEntity::getRule)
+                                                 .collect(Collectors.toList()));
             Map<String, String> params = new HashMap<>(1);
             params.put("data", data);
             return executeCommand(app, ip, port, SET_PARAM_RULE_PATH, params, true).thenCompose(e -> {
@@ -630,9 +632,9 @@ public class SentinelApiClient {
         try {
             Map<String, String> params = new HashMap<>(2);
             params.put("port", config.getPort()
-                    .toString());
+                                     .toString());
             params.put("idleSeconds", config.getIdleSeconds()
-                    .toString());
+                                            .toString());
             return executeCommand(app, ip, port, MODIFY_CLUSTER_SERVER_TRANSPORT_CONFIG_PATH, params,
                     false).thenCompose(e -> {
                 if (CommandConstants.MSG_SUCCESS.equals(e)) {

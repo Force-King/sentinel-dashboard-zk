@@ -45,12 +45,12 @@ public class FlowRuleApolloProvider implements DynamicRuleProvider<List<FlowRule
         String flowDataId = ApolloConfigUtil.getFlowDataId(appName);
         OpenNamespaceDTO openNamespaceDTO = apolloOpenApiClient.getNamespace(appId, "DEV", "default", "application");
         String rules = openNamespaceDTO.getItems()
-                .stream()
-                .filter(p -> p.getKey()
-                        .equals(flowDataId))
-                .map(OpenItemDTO::getValue)
-                .findFirst()
-                .orElse("");
+                                       .stream()
+                                       .filter(p -> p.getKey()
+                                                     .equals(flowDataId))
+                                       .map(OpenItemDTO::getValue)
+                                       .findFirst()
+                                       .orElse("");
 
         if (StringUtil.isEmpty(rules)) {
             return new ArrayList<>();

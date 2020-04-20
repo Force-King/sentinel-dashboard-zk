@@ -150,7 +150,7 @@ public class InMemoryMetricsRepositoryTest {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.getCause()
-                    .printStackTrace();
+             .printStackTrace();
             if (e.getCause() instanceof ConcurrentModificationException) {
                 fail("concurrent error occurred");
             } else {

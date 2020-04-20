@@ -16,90 +16,90 @@ public class VersionUtilsTest {
         Optional<SentinelVersion> version = VersionUtils.parseVersion("1.2.3");
         assertTrue(version.isPresent());
         assertEquals(1, version.get()
-                .getMajorVersion());
+                               .getMajorVersion());
         assertEquals(2, version.get()
-                .getMinorVersion());
+                               .getMinorVersion());
         assertEquals(3, version.get()
-                .getFixVersion());
+                               .getFixVersion());
         assertNull(version.get()
-                .getPostfix());
+                          .getPostfix());
 
         version = VersionUtils.parseVersion("1.2");
         assertTrue(version.isPresent());
         assertEquals(1, version.get()
-                .getMajorVersion());
+                               .getMajorVersion());
         assertEquals(2, version.get()
-                .getMinorVersion());
+                               .getMinorVersion());
         assertEquals(0, version.get()
-                .getFixVersion());
+                               .getFixVersion());
         assertNull(version.get()
-                .getPostfix());
+                          .getPostfix());
 
         version = VersionUtils.parseVersion("1.");
         assertTrue(version.isPresent());
         assertEquals(1, version.get()
-                .getMajorVersion());
+                               .getMajorVersion());
         assertEquals(0, version.get()
-                .getMinorVersion());
+                               .getMinorVersion());
         assertEquals(0, version.get()
-                .getFixVersion());
+                               .getFixVersion());
         assertNull(version.get()
-                .getPostfix());
+                          .getPostfix());
 
         version = VersionUtils.parseVersion("1.2.");
         assertTrue(version.isPresent());
         assertEquals(1, version.get()
-                .getMajorVersion());
+                               .getMajorVersion());
         assertEquals(2, version.get()
-                .getMinorVersion());
+                               .getMinorVersion());
         assertEquals(0, version.get()
-                .getFixVersion());
+                               .getFixVersion());
         assertNull(version.get()
-                .getPostfix());
+                          .getPostfix());
 
         version = VersionUtils.parseVersion("1.2.3.");
         assertTrue(version.isPresent());
         assertEquals(1, version.get()
-                .getMajorVersion());
+                               .getMajorVersion());
         assertEquals(2, version.get()
-                .getMinorVersion());
+                               .getMinorVersion());
         assertEquals(3, version.get()
-                .getFixVersion());
+                               .getFixVersion());
         assertNull(version.get()
-                .getPostfix());
+                          .getPostfix());
 
         version = VersionUtils.parseVersion("1.2.3.4");
         assertTrue(version.isPresent());
         assertEquals(1, version.get()
-                .getMajorVersion());
+                               .getMajorVersion());
         assertEquals(2, version.get()
-                .getMinorVersion());
+                               .getMinorVersion());
         assertEquals(3, version.get()
-                .getFixVersion());
+                               .getFixVersion());
         assertNull(version.get()
-                .getPostfix());
+                          .getPostfix());
 
         version = VersionUtils.parseVersion("1");
         assertTrue(version.isPresent());
         assertEquals(1, version.get()
-                .getMajorVersion());
+                               .getMajorVersion());
         assertEquals(0, version.get()
-                .getMinorVersion());
+                               .getMinorVersion());
         assertEquals(0, version.get()
-                .getFixVersion());
+                               .getFixVersion());
         assertNull(version.get()
-                .getPostfix());
+                          .getPostfix());
 
         version = VersionUtils.parseVersion("1.2.3-");
         assertTrue(version.isPresent());
         assertEquals(1, version.get()
-                .getMajorVersion());
+                               .getMajorVersion());
         assertEquals(2, version.get()
-                .getMinorVersion());
+                               .getMinorVersion());
         assertEquals(3, version.get()
-                .getFixVersion());
+                               .getFixVersion());
         assertNull(version.get()
-                .getPostfix());
+                          .getPostfix());
 
         version = VersionUtils.parseVersion("-");
         assertFalse(version.isPresent());
@@ -116,12 +116,12 @@ public class VersionUtilsTest {
         version = VersionUtils.parseVersion("1.2.3-SNAPSHOTS");
         assertTrue(version.isPresent());
         assertEquals(1, version.get()
-                .getMajorVersion());
+                               .getMajorVersion());
         assertEquals(2, version.get()
-                .getMinorVersion());
+                               .getMinorVersion());
         assertEquals(3, version.get()
-                .getFixVersion());
+                               .getFixVersion());
         assertEquals("SNAPSHOTS", version.get()
-                .getPostfix());
+                                         .getPostfix());
     }
 }

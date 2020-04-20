@@ -58,7 +58,7 @@ public class ClusterConfigController {
     private static final String KEY_MODE = "mode";
     private final Logger logger = LoggerFactory.getLogger(ClusterConfigController.class);
     private final SentinelVersion version140 = new SentinelVersion().setMajorVersion(1)
-            .setMinorVersion(4);
+                                                                    .setMinorVersion(4);
     @Autowired
     private AppManagement appManagement;
     @Autowired
@@ -81,7 +81,7 @@ public class ClusterConfigController {
                             return res;
                         }
                         clusterConfigService.modifyClusterClientConfig(data)
-                                .get();
+                                            .get();
                         return Result.ofSuccess(true);
                     case ClusterStateManager.CLUSTER_SERVER:
                         ClusterServerModifyRequest d = JSON.parseObject(payload, ClusterServerModifyRequest.class);
@@ -91,7 +91,7 @@ public class ClusterConfigController {
                         }
                         // TODO: bad design here, should refactor!
                         clusterConfigService.modifyClusterServerConfig(d)
-                                .get();
+                                            .get();
                         return Result.ofSuccess(true);
                     default:
                         return Result.ofFail(-1, "invalid mode");
@@ -132,8 +132,8 @@ public class ClusterConfigController {
         }
         try {
             return clusterConfigService.getClusterUniversalState(app, ip, port)
-                    .thenApply(Result::ofSuccess)
-                    .get();
+                                       .thenApply(Result::ofSuccess)
+                                       .get();
         } catch (ExecutionException ex) {
             logger.error("Error when fetching cluster state", ex.getCause());
             return errorResponse(ex);
@@ -150,9 +150,9 @@ public class ClusterConfigController {
         }
         try {
             return clusterConfigService.getClusterUniversalState(app)
-                    .thenApply(ClusterEntityUtils::wrapToAppClusterServerState)
-                    .thenApply(Result::ofSuccess)
-                    .get();
+                                       .thenApply(ClusterEntityUtils::wrapToAppClusterServerState)
+                                       .thenApply(Result::ofSuccess)
+                                       .get();
         } catch (ExecutionException ex) {
             logger.error("Error when fetching cluster server state of app: " + app, ex.getCause());
             return errorResponse(ex);
@@ -169,9 +169,9 @@ public class ClusterConfigController {
         }
         try {
             return clusterConfigService.getClusterUniversalState(app)
-                    .thenApply(ClusterEntityUtils::wrapToAppClusterClientState)
-                    .thenApply(Result::ofSuccess)
-                    .get();
+                                       .thenApply(ClusterEntityUtils::wrapToAppClusterClientState)
+                                       .thenApply(Result::ofSuccess)
+                                       .get();
         } catch (ExecutionException ex) {
             logger.error("Error when fetching cluster token client state of app: " + app, ex.getCause());
             return errorResponse(ex);
@@ -188,8 +188,8 @@ public class ClusterConfigController {
         }
         try {
             return clusterConfigService.getClusterUniversalState(app)
-                    .thenApply(Result::ofSuccess)
-                    .get();
+                                       .thenApply(Result::ofSuccess)
+                                       .get();
         } catch (ExecutionException ex) {
             logger.error("Error when fetching cluster state of app: " + app, ex.getCause());
             return errorResponse(ex);
@@ -206,10 +206,10 @@ public class ClusterConfigController {
     private boolean checkIfSupported(String app, String ip, int port) {
         try {
             return Optional.ofNullable(appManagement.getDetailApp(app))
-                    .flatMap(e -> e.getMachine(ip, port))
-                    .flatMap(m -> VersionUtils.parseVersion(m.getVersion())
-                            .map(v -> v.greaterOrEqual(version140)))
-                    .orElse(true);
+                           .flatMap(e -> e.getMachine(ip, port))
+                           .flatMap(m -> VersionUtils.parseVersion(m.getVersion())
+                                                     .map(v -> v.greaterOrEqual(version140)))
+                           .orElse(true);
             // If error occurred or cannot retrieve machine info, return true.
         } catch (Exception ex) {
             return true;
